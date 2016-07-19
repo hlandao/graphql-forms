@@ -8,51 +8,33 @@
 ## API
 
 ### **Schema**
-Each GraphQL object may have the `autoform` property with any of the following properties:
-#### `label`
-The label to be displayed in the form or in the list.
-#### `readOnly`
-If `true`, a read-only field will be rendered.
-#### `displayInList`
-If `true`, will be displayed in the list view.
-#### `hidden`
-If `true`, the field will be hidden in the form.
+Each GraphQL object may have the **autoform** property with any of the following properties:
+* `label`: The label to be displayed in the form or in the list.
+* `readOnly`: If TRUE, a read-only field will be rendered.
+* `displayInList`: If TRUE, will be displayed in the list view.
+* `hidden`: If TRUE, the field will be hidden in the form.
 Can be either a Boolean or a function
 As a function `Function(data)` it's invoked with current data model and it should return Boolean.
-#### `renderAsLink`
-If `true`, will be rendered as a clickabe href in the list view.
+* `renderAsLink`: If TRUE, will be rendered as a clickabe href in the list view.
 
 ### **Form** Props
-#### `schema`
-The GraphQLObjectType object - **mandatory**
-#### `data`
-A data model to edit, should follow the provided schema - **optional**
-#### `onChange`
-A function that is being when user change one of the fields (similar to `react-auto-form`)
-` function(event, name, data, change){}`
-#### `onSubmit`
-A function that is being invoked when user clicks submit. (similar to `react-auto-form`)
-`Function(event, name, data, change)`
+* `schema`: The GraphQLObjectType object - **mandatory**
+* `data`: A data model to edit, should follow the provided schema - **optional**
+* `onChange`: A function that is being when user change one of the fields (similar to react-auto-form)
+**Function(event, name, data, change)**
+* `onSubmit`: A function that is being invoked when user clicks submit. (similar to react-auto-form)
+**Function(event, name, data, change)**
 
 ### **List** Props
-#### `displayName`
-The display name for the header of the page.
-#### `schema`
-The schema to be rendered.
-#### `data`
-Array of the items to be displayed, must have same fields as the schema.
-#### `loading`
-Whether data is being loaded at the moment.
-#### `error`
-A string to be displayed in case of an error.
-#### `deleteItemFn`
-A `Function(_id)` that's invoked when user clicks remove. If no func is provided, remove button will not be rendered.
-#### `addItemFn`
-A `Function()` that's invoked when user clicks  the add button .
-#### `clickItemFn`
-A function(item, key) to be invoked when user clicks the item where key is the key that was clicked.
-#### `autoform`
-An object to override each fields "autoform" properties. {FIELD_NAME: {AUTOFORM_PROPERTIES}}
+* `displayName`: The display name for the header of the page.
+* `schema`: The schema to be rendered.
+* `data`: Array of the items to be displayed, must have same fields as the schema.
+* `loading`: Whether data is being loaded at the moment.
+* `error`: A string to be displayed in case of an error.
+* `deleteItemFn`: A **Function(_id)** that's invoked when user clicks remove. If no func is provided, remove button will not be rendered.
+* `addItemFn`: A **Function()** that's invoked when user clicks  the add button .
+* `clickItemFn`: A **Function(item, key)** to be invoked when user clicks the item where key is the key that was clicked.
+* `autoform`: An object to override each fields "autoform" properties. **{FIELD_NAME: {AUTOFORM_PROPERTIES}}**
 
 ## Example
 **Schema**
