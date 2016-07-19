@@ -1,0 +1,38 @@
+{
+  "name": "graphql-forms",
+  "version": "0.0.1",
+  "description": "Auto generated Graphql Forms with React",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hlandao/graphql-forms.git"
+  },
+  "keywords": [
+    "react",
+    "graphql",
+    "forms",
+    "autoform",
+    "meteor"
+  ],
+  "author": "hlandao <hlandao@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hlandao/graphql-forms/issues"
+  },
+  "homepage": "https://github.com/hlandao/graphql-forms#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2016": "^6.11.3",
+    "babel-preset-react": "^6.3.13"
+  },
+  "dependencies": {
+    "graphql": "^0.6.1",
+    "react": "^15.2.1",
+    "react-auto-form": "^1.3.0"
+  }
+}
