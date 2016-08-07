@@ -81,10 +81,15 @@
 	var App = function (_Component) {
 	  _inherits(App, _Component);
 
-	  function App() {
+	  function App(props, context) {
 	    _classCallCheck(this, App);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props, context));
+
+	    _this.state = {
+	      formValue: {}
+	    };
+	    return _this;
 	  }
 
 	  _createClass(App, [{
@@ -95,22 +100,51 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container' },
-	        _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, onChange: function onChange() {
-	            return _this2.onChange.apply(_this2, arguments);
-	          }, onSubmit: function onSubmit() {
-	            return _this2.onSubmit.apply(_this2, arguments);
-	          } })
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-8' },
+	            _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, onChange: function onChange() {
+	                return _this2.onChange.apply(_this2, arguments);
+	              }, onSubmit: function onSubmit() {
+	                return _this2.onSubmit.apply(_this2, arguments);
+	              } })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-4' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'panel panel-default' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'panel-heading' },
+	                ' Form Value '
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'panel-body' },
+	                _react2.default.createElement('textarea', { style: { width: '100%' }, rows: 20, value: JSON.stringify(this.state.formValue, null, '\t') })
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement('div', null)
 	      );
 	    }
 	  }, {
 	    key: 'onChange',
 	    value: function onChange(path, value, formValue) {
 	      console.log('Form has changed ' + path + '=' + value + '. Form value:', formValue);
+	      this.setState({ formValue: formValue });
 	    }
 	  }, {
 	    key: 'onSubmit',
 	    value: function onSubmit(formValue) {
 	      console.log('Submit the form with value:', formValue);
+	      alert('Form was submitted. See console for form values.');
 	    }
 	  }]);
 
