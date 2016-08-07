@@ -2,9 +2,8 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './main.js',
-  output: { path: __dirname, filename: 'bundle.js' },
-  devtool: 'source-map',
+  entry: './example/main.js',
+  output: { path: __dirname + '/example', filename: 'bundle.js' },
   module: {
     loaders: [
       {

@@ -5,15 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.List = exports.Form = undefined;
 
-var _form = require('./form.jsx');
+var _Form = require('./Form.jsx');
 
-var _form2 = _interopRequireDefault(_form);
+var _Form2 = _interopRequireDefault(_Form);
 
-var _list = require('./list.jsx');
+var _List = require('./List.jsx');
 
-var _list2 = _interopRequireDefault(_list);
+var _List2 = _interopRequireDefault(_List);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.Form = _form2.default;
-exports.List = _list2.default;
+exports.Form = _Form2.default;
+exports.List = _List2.default;
