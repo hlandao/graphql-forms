@@ -1,5 +1,5 @@
-import Form from './form.jsx'
-import List from './list.jsx'
+import Form from './Form.jsx'
+import List from './List.jsx'
 
 export {
   Form,
