@@ -147,7 +147,20 @@
 	            )
 	          )
 	        ),
-	        _react2.default.createElement('div', null)
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-md-6' },
+	            _react2.default.createElement(
+	              'h5',
+	              null,
+	              'Fields Options Being Used:'
+	            ),
+	            _react2.default.createElement('textarea', { style: { width: '100%' }, rows: 10, readOnly: true, value: JSON.stringify(FIELDS_OPTIONS, null, 4) })
+	          )
+	        )
 	      );
 	    }
 	  }, {

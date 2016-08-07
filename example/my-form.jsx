@@ -43,7 +43,12 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <div>
+
+        <div className="row">
+          <div className="col-md-6">
+            <h5>Fields Options Being Used:</h5>
+            <textarea style={{width:'100%'}} rows={10} readOnly value={JSON.stringify(FIELDS_OPTIONS, null, 4)}></textarea>
+          </div>
         </div>
       </div>
     )
