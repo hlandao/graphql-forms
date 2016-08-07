@@ -78,6 +78,22 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var FIELDS_OPTIONS = {
+	  id: {
+	    _hidden: true
+	  },
+	  name: {
+	    _label: 'The Label of Name',
+	    _helpText: 'Helper for name',
+	    _placeholder: 'Placeholder for name...'
+	  },
+	  nestedExample: {
+	    color: {
+	      _hidden: true
+	    }
+	  }
+	};
+
 	var App = function (_Component) {
 	  _inherits(App, _Component);
 
@@ -106,7 +122,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-md-8' },
-	            _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, onChange: function onChange() {
+	            _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, fieldsOptions: FIELDS_OPTIONS, onChange: function onChange() {
 	                return _this2.onChange.apply(_this2, arguments);
 	              }, onSubmit: function onSubmit() {
 	                return _this2.onSubmit.apply(_this2, arguments);
@@ -126,7 +142,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'panel-body' },
-	                _react2.default.createElement('textarea', { style: { width: '100%' }, rows: 20, value: JSON.stringify(this.state.formValue, null, '\t') })
+	                _react2.default.createElement('textarea', { style: { width: '100%' }, rows: 20, readOnly: true, value: JSON.stringify(this.state.formValue, null, '\t') })
 	              )
 	            )
 	          )
@@ -31958,6 +31974,7 @@
 	      var object = _props.object;
 	      var data = _props.data;
 	      var formOptions = _props.formOptions;
+	      var fieldsOptions = _props.fieldsOptions;
 
 	      return _react2.default.createElement(
 	        'form',
@@ -31981,6 +31998,7 @@
 	              data: data,
 	              title: null,
 	              formOptions: formOptions,
+	              fieldsOptions: fieldsOptions,
 	              onChange: this.onChange,
 	              ref: function ref(_ref) {
 	                return _this2.objectRef = _ref;
@@ -32023,8 +32041,8 @@
 
 	Form.propTypes = {
 	  object: _react.PropTypes.object.isRequired,
-	  autoform: _react.PropTypes.object,
 	  formOptions: _react.PropTypes.object,
+	  fieldsOptions: _react.PropTypes.object,
 	  data: _react.PropTypes.object,
 	  onSubmit: _react.PropTypes.func,
 	  onChange: _react.PropTypes.func
@@ -32032,8 +32050,9 @@
 
 	Form.defaultProps = {
 	  formOptions: {
-	    nestedLevels: 1
-	  }
+	    nestedLevels: 3
+	  },
+	  fieldsOptions: {}
 	};
 
 	exports.default = Form;
@@ -48718,6 +48737,8 @@
 	    value: function render() {
 	      var title = this.props.title;
 
+
+	      if (!this.shouldRenderMyself()) return null;
 	      return title ? this._renderWithTitle() : this._renderWithoutTitle();
 	    }
 	  }, {
@@ -48735,7 +48756,8 @@
 	            'label',
 	            { forHtml: '' },
 	            title
-	          )
+	          ),
+	          this._renderHelpText()
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -48765,6 +48787,7 @@
 	      var object = _props.object;
 	      var path = _props.path;
 	      var formOptions = _props.formOptions;
+	      var fieldsOptions = _props.fieldsOptions;
 
 
 	      return Object.keys(fields).map(function (key) {
@@ -48773,7 +48796,8 @@
 	        var title = key;
 	        var newPath = _this2.buildPath(path, key);
 	        var onChange = _this2._onChange;
-	        return _renderField.renderField.call(_this2, { title: title, object: object, data: data, formOptions: formOptions, path: newPath, key: key, onChange: onChange }, field.type);
+
+	        return _renderField.renderField.call(_this2, { title: title, object: object, data: data, formOptions: formOptions, fieldsOptions: fieldsOptions, path: newPath, key: key, onChange: onChange }, field.type);
 	      });
 	    }
 	  }, {
@@ -48806,7 +48830,7 @@
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -48819,6 +48843,10 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _typeByPath = __webpack_require__(241);
+
+	var _lodash = __webpack_require__(237);
+
+	var _graphql = __webpack_require__(161);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48839,12 +48867,21 @@
 	    _this.nested = {};
 	    _this._onFieldChanged = _this._onFieldChanged.bind(_this);
 	    _this.getValue = _this.getValue.bind(_this);
-	    _this.getKey = _this.getKey.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(BaseRenderer, [{
-	    key: "myType",
+	    key: '_renderHelpText',
+	    value: function _renderHelpText() {
+	      var helpText = this.getHelpText();
+	      return helpText ? _react2.default.createElement(
+	        'span',
+	        { className: 'help-block' },
+	        helpText
+	      ) : null;
+	    }
+	  }, {
+	    key: 'myType',
 	    value: function myType() {
 	      var _props = this.props;
 	      var object = _props.object;
@@ -48853,7 +48890,16 @@
 	      return (0, _typeByPath.typeByPath)(object, path);
 	    }
 	  }, {
-	    key: "buildPath",
+	    key: 'myField',
+	    value: function myField() {
+	      var _props2 = this.props;
+	      var object = _props2.object;
+	      var path = _props2.path;
+
+	      return (0, _typeByPath.fieldByPath)(object, path);
+	    }
+	  }, {
+	    key: 'buildPath',
 	    value: function buildPath(parentPath, keyName) {
 	      parentPath = parentPath || "";
 	      keyName = keyName || "";
@@ -48865,26 +48911,70 @@
 	      return myPath;
 	    }
 	  }, {
-	    key: "myNestedLevel",
+	    key: 'myNestedLevel',
 	    value: function myNestedLevel() {
 	      return this.props.path ? this.props.path.split('.').length : 1;
 	    }
 	  }, {
-	    key: "_onFieldChanged",
+	    key: 'myFieldOptions',
+	    value: function myFieldOptions() {
+	      return this.getFieldOptions(this.props.path);
+	    }
+	  }, {
+	    key: '_onFieldChanged',
 	    value: function _onFieldChanged(path, value) {
 	      var onChange = this.props.onChange;
 
 	      onChange && onChange(path, value);
 	    }
 	  }, {
-	    key: "getValue",
+	    key: 'getValue',
 	    value: function getValue() {
 	      return null;
 	    }
 	  }, {
-	    key: "getKey",
-	    value: function getKey() {
-	      return this.props.key;
+	    key: 'getFieldOptions',
+	    value: function getFieldOptions(path) {
+	      var arr = path ? path.split('.') : [];
+	      return (0, _lodash.reduce)(arr, function (fieldsOptions, key) {
+	        return fieldsOptions[key] || {};
+	      }, this.props.fieldsOptions);
+	    }
+	  }, {
+	    key: 'getPlaceholder',
+	    value: function getPlaceholder() {
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions._placeholder || "";
+	    }
+	  }, {
+	    key: 'getLabel',
+	    value: function getLabel() {
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions._label || this.props.title;
+	    }
+	  }, {
+	    key: 'getHelpText',
+	    value: function getHelpText() {
+	      var myField = this.myField();
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions.helpText ? fieldOptions.helpText : myField ? myField.description : "";
+	    }
+	  }, {
+	    key: 'shouldRenderMyself',
+	    value: function shouldRenderMyself() {
+	      var formOptions = this.props.formOptions;
+
+	      return !this.isHidden() && this.myNestedLevel() <= formOptions.nestedLevels;
+	    }
+	  }, {
+	    key: 'isHidden',
+	    value: function isHidden() {
+	      var fieldOptions = this.myFieldOptions();
+	      if ((0, _lodash.isFunction)(fieldOptions._hidden)) {
+	        fieldOptions._hidden(this.getValue());
+	      } else {
+	        return !!fieldOptions._hidden;
+	      }
 	    }
 	  }]);
 
@@ -48897,6 +48987,7 @@
 	BaseRenderer.propTypes = {
 	  object: _react.PropTypes.object.isRequired,
 	  formOptions: _react.PropTypes.object.isRequired,
+	  fieldsOptions: _react.PropTypes.object.isRequired,
 	  path: _react.PropTypes.string,
 	  title: _react.PropTypes.string,
 	  key: _react.PropTypes.string,
@@ -48914,6 +49005,7 @@
 	  value: true
 	});
 	exports.typeByPath = typeByPath;
+	exports.fieldByPath = fieldByPath;
 
 	var _graphql = __webpack_require__(161);
 
@@ -48938,6 +49030,38 @@
 	    switch (parentType.constructor) {
 	      case _graphql.GraphQLObjectType:
 	        return parentType.getFields()[keyName].type;
+	        break;
+	      case _graphql.GraphQLList:
+	        return parentType.ofType;
+	        break;
+	    }
+	  }, gqlType);
+	}
+
+	function fieldByPath(gqlType, path) {
+	  if (!path) {
+	    return gqlType.type ? gqlType.type : gqlType;
+	  }
+
+	  var arr = path.split('.');
+
+	  // We don't want to return "field" for the embedded list ofType;
+	  if (arr[arr.length - 1] == 'ofType') return null;
+
+	  return _.reduce(arr, function (parent, keyName) {
+
+	    var parentType = parent.type || parent;
+	    if (!parentType) {
+	      throw 'gqlType must be GraphQL Type';
+	    }
+
+	    if (!keyName) {
+	      return parentType;
+	    }
+
+	    switch (parentType.constructor) {
+	      case _graphql.GraphQLObjectType:
+	        return parentType.getFields()[keyName];
 	        break;
 	      case _graphql.GraphQLList:
 	        return parentType.ofType;
@@ -49059,18 +49183,21 @@
 	  _createClass(ScalarTypeRenderer, [{
 	    key: 'render',
 	    value: function render() {
-	      var title = this.props.title;
+	      var label = this.getLabel();
+
+	      if (!this.shouldRenderMyself()) return null;
 
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'form-group' },
-	        title ? _react2.default.createElement(
+	        label ? _react2.default.createElement(
 	          'label',
 	          { forHtml: '' },
-	          title,
+	          label,
 	          ' '
 	        ) : null,
-	        this._renderInput()
+	        this._renderInput(),
+	        this._renderHelpText()
 	      );
 	    }
 	  }, {
@@ -49078,7 +49205,7 @@
 	    value: function _renderInput() {
 	      var _this2 = this;
 
-	      var placeholder = this.props.placeholder || "";
+	      var placeholder = this.getPlaceholder();
 	      return _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
 	          _this2.input = _ref;
 	        } });
@@ -49097,7 +49224,7 @@
 	  }, {
 	    key: 'getValue',
 	    value: function getValue() {
-	      return this.input.value || "";
+	      return this.input ? this.input.value : "";
 	    }
 	  }]);
 
@@ -49162,22 +49289,25 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var title = this.props.title;
+	      var label = this.getLabel();
+
+	      if (!this.shouldRenderMyself()) return null;
 
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'panel panel-default' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'panel-heading' },
-	          title ? _react2.default.createElement(
+	          { className: 'panel-heading', style: { position: "relative" } },
+	          label ? _react2.default.createElement(
 	            'label',
 	            { forHtml: '' },
-	            title
+	            label
 	          ) : null,
+	          this._renderHelpText(),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'list-add-button', style: { float: "right" }, onClick: function onClick(e) {
+	            { className: 'list-add-button', style: { position: "absolute", top: 15, right: 15 }, onClick: function onClick(e) {
 	                return _this2._addButtonClicked(e);
 	              } },
 	            '+'
@@ -49235,6 +49365,7 @@
 	      var _props = this.props;
 	      var object = _props.object;
 	      var formOptions = _props.formOptions;
+	      var fieldsOptions = _props.fieldsOptions;
 	      var path = _props.path;
 	      var data = _props.data;
 
@@ -49243,6 +49374,7 @@
 	      var props = {
 	        object: object,
 	        formOptions: formOptions,
+	        fieldsOptions: fieldsOptions,
 	        path: this.buildPath(path, 'ofType'),
 	        title: null,
 	        data: data,

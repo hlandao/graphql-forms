@@ -20,13 +20,16 @@ export default class ListRenderer extends BaseRenderer {
   }
 
   render() {
-    const {title} = this.props
+    const label = this.getLabel();
+
+    if(!this.shouldRenderMyself()) return null;
+
     return (
       <div className="panel panel-default">
-        <div className="panel-heading">
-          {title ? (<label forHtml="">{title}</label>) : null}
-
-          <button className="list-add-button" style={{float:"right"}} onClick={(e) => this._addButtonClicked(e)}>
+        <div className="panel-heading" style={{position:"relative"}}>
+          {label ? (<label forHtml="">{label}</label>) : null}
+          {this._renderHelpText()}
+          <button className="list-add-button" style={{position:"absolute", top: 15, right: 15}} onClick={(e) => this._addButtonClicked(e)}>
             +
           </button>
         </div>
@@ -64,12 +67,13 @@ export default class ListRenderer extends BaseRenderer {
     const type = this.myType();
     const fieldType = type.ofType;
 
-    const {object, formOptions, path, data} = this.props;
+    const {object, formOptions, fieldsOptions, path, data} = this.props;
     const onChange = this._onFieldChanged;
 
     const props = {
       object,
       formOptions,
+      fieldsOptions,
       path: this.buildPath(path, 'ofType'),
       title: null,
       data,

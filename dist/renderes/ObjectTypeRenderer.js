@@ -44,6 +44,8 @@ var ObjectTypeRenderer = function (_BaseRenderer) {
     value: function render() {
       var title = this.props.title;
 
+
+      if (!this.shouldRenderMyself()) return null;
       return title ? this._renderWithTitle() : this._renderWithoutTitle();
     }
   }, {
@@ -61,7 +63,8 @@ var ObjectTypeRenderer = function (_BaseRenderer) {
             'label',
             { forHtml: '' },
             title
-          )
+          ),
+          this._renderHelpText()
         ),
         _react2.default.createElement(
           'div',
@@ -91,6 +94,7 @@ var ObjectTypeRenderer = function (_BaseRenderer) {
       var object = _props.object;
       var path = _props.path;
       var formOptions = _props.formOptions;
+      var fieldsOptions = _props.fieldsOptions;
 
 
       return Object.keys(fields).map(function (key) {
@@ -99,7 +103,8 @@ var ObjectTypeRenderer = function (_BaseRenderer) {
         var title = key;
         var newPath = _this2.buildPath(path, key);
         var onChange = _this2._onChange;
-        return _renderField.renderField.call(_this2, { title: title, object: object, data: data, formOptions: formOptions, path: newPath, key: key, onChange: onChange }, field.type);
+
+        return _renderField.renderField.call(_this2, { title: title, object: object, data: data, formOptions: formOptions, fieldsOptions: fieldsOptions, path: newPath, key: key, onChange: onChange }, field.type);
       });
     }
   }, {

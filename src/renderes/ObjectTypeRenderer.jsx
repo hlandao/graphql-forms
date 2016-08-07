@@ -14,13 +14,18 @@ export default class ObjectTypeRenderer extends BaseRenderer {
 
   render() {
     const {title} = this.props;
+
+    if(!this.shouldRenderMyself()) return null;
     return title ? this._renderWithTitle() : this._renderWithoutTitle()
   }
   _renderWithTitle() {
     const {title} = this.props;
     return (
       <div className="panel panel-default">
-        <div className="panel-heading"><label forHtml="">{title}</label></div>
+        <div className="panel-heading">
+          <label forHtml="">{title}</label>
+          {this._renderHelpText()}
+        </div>
         <div className="panel-body">
           {this._renderFields()}
         </div>
@@ -37,7 +42,7 @@ export default class ObjectTypeRenderer extends BaseRenderer {
   _renderFields() {
     const myType = this.myType();
     const fields = myType.getFields();
-    const {data, object, path, formOptions} = this.props;
+    const {data, object, path, formOptions, fieldsOptions} = this.props;
 
     return Object.keys(fields).map(key => {
       const field = fields[key];
@@ -45,7 +50,8 @@ export default class ObjectTypeRenderer extends BaseRenderer {
       const title = key;
       const newPath = this.buildPath(path, key);
       const onChange = this._onChange;
-      return renderField.call(this, {title, object, data, formOptions, path: newPath, key, onChange}, field.type);
+
+      return renderField.call(this, {title, object, data, formOptions, fieldsOptions, path: newPath, key, onChange}, field.type);
     })
   }
 

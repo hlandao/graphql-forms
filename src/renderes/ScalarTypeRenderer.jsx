@@ -13,17 +13,21 @@ export default class ScalarTypeRenderer extends BaseRenderer {
   }
 
   render() {
-    const {title} = this.props
+    const label = this.getLabel();
+
+    if(!this.shouldRenderMyself()) return null;
+
     return (
       <div className="form-group">
-        {title ? <label forHtml="">{title} </label> : null}
+        {label ? <label forHtml="">{label} </label> : null}
         {this._renderInput()}
+        {this._renderHelpText()}
       </div>
     )
   }
 
   _renderInput() {
-    let placeholder = this.props.placeholder || "";
+    let placeholder = this.getPlaceholder()
     return (
       <input type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} />
     )
@@ -37,6 +41,6 @@ export default class ScalarTypeRenderer extends BaseRenderer {
   }
 
   getValue() {
-    return this.input.value || "";
+    return this.input ? this.input.value : "";
   }
 }

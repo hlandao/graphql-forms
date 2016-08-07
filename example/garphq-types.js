@@ -2,10 +2,7 @@ import {
   GraphQLInt,
   GraphQLString,
   GraphQLObjectType,
-  GraphQLList,
-  GraphQLSchema,
-  parse,
-  visit
+  GraphQLList
 } from 'graphql'
 
 export const NestedType = new GraphQLObjectType({

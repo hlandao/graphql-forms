@@ -40,18 +40,21 @@ var ScalarTypeRenderer = function (_BaseRenderer) {
   _createClass(ScalarTypeRenderer, [{
     key: 'render',
     value: function render() {
-      var title = this.props.title;
+      var label = this.getLabel();
+
+      if (!this.shouldRenderMyself()) return null;
 
       return _react2.default.createElement(
         'div',
         { className: 'form-group' },
-        title ? _react2.default.createElement(
+        label ? _react2.default.createElement(
           'label',
           { forHtml: '' },
-          title,
+          label,
           ' '
         ) : null,
-        this._renderInput()
+        this._renderInput(),
+        this._renderHelpText()
       );
     }
   }, {
@@ -59,7 +62,7 @@ var ScalarTypeRenderer = function (_BaseRenderer) {
     value: function _renderInput() {
       var _this2 = this;
 
-      var placeholder = this.props.placeholder || "";
+      var placeholder = this.getPlaceholder();
       return _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
           _this2.input = _ref;
         } });
@@ -78,7 +81,7 @@ var ScalarTypeRenderer = function (_BaseRenderer) {
   }, {
     key: 'getValue',
     value: function getValue() {
-      return this.input.value || "";
+      return this.input ? this.input.value : "";
     }
   }]);
 

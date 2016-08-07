@@ -32,3 +32,35 @@ export function typeByPath(gqlType, path) {
     }
   }, gqlType);
 }
+
+export function fieldByPath(gqlType, path) {
+  if(!path) {
+    return  gqlType.type ? gqlType.type : gqlType;
+  }
+
+  const arr = path.split('.');
+
+  // We don't want to return "field" for the embedded list ofType;
+  if(arr[arr.length - 1] == 'ofType') return null;
+
+  return _.reduce(arr, function(parent, keyName) {
+
+    let parentType = parent.type || parent;
+    if(!parentType) {
+      throw 'gqlType must be GraphQL Type'
+    }
+
+    if(!keyName) {
+      return parentType;
+    }
+
+    switch (parentType.constructor) {
+      case GraphQLObjectType:
+        return parentType.getFields()[keyName];
+        break;
+      case GraphQLList:
+        return parentType.ofType;
+        break;
+    }
+  }, gqlType);
+}

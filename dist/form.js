@@ -46,6 +46,7 @@ var Form = function (_Component) {
       var object = _props.object;
       var data = _props.data;
       var formOptions = _props.formOptions;
+      var fieldsOptions = _props.fieldsOptions;
 
       return _react2.default.createElement(
         'form',
@@ -69,6 +70,7 @@ var Form = function (_Component) {
               data: data,
               title: null,
               formOptions: formOptions,
+              fieldsOptions: fieldsOptions,
               onChange: this.onChange,
               ref: function ref(_ref) {
                 return _this2.objectRef = _ref;
@@ -111,8 +113,8 @@ var Form = function (_Component) {
 
 Form.propTypes = {
   object: _react.PropTypes.object.isRequired,
-  autoform: _react.PropTypes.object,
   formOptions: _react.PropTypes.object,
+  fieldsOptions: _react.PropTypes.object,
   data: _react.PropTypes.object,
   onSubmit: _react.PropTypes.func,
   onChange: _react.PropTypes.func
@@ -120,8 +122,9 @@ Form.propTypes = {
 
 Form.defaultProps = {
   formOptions: {
-    nestedLevels: 1
-  }
+    nestedLevels: 3
+  },
+  fieldsOptions: {}
 };
 
 exports.default = Form;

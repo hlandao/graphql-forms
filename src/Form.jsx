@@ -11,7 +11,7 @@ class Form extends Component {
   }
 
   render() {
-    const {object, data, formOptions} = this.props
+    const {object, data, formOptions, fieldsOptions} = this.props
     return (
       <form className="gql-form" onSubmit={this.onSubmit}>
         <div className="panel panel-default">
@@ -21,6 +21,7 @@ class Form extends Component {
                                 data={data}
                                 title={null}
                                 formOptions={formOptions}
+                                fieldsOptions={fieldsOptions}
                                 onChange={this.onChange}
                                 ref={ref => this.objectRef = ref}/>
             <button type="submit">Submit</button>
@@ -50,8 +51,8 @@ class Form extends Component {
 
 Form.propTypes = {
   object: PropTypes.object.isRequired,
-  autoform: PropTypes.object,
   formOptions: PropTypes.object,
+  fieldsOptions: PropTypes.object,
   data: PropTypes.object,
   onSubmit: PropTypes.func,
   onChange: PropTypes.func
@@ -59,8 +60,9 @@ Form.propTypes = {
 
 Form.defaultProps = {
   formOptions: {
-    nestedLevels: 1
-  }
+    nestedLevels: 3
+  },
+  fieldsOptions: {}
 }
 
 export default Form;

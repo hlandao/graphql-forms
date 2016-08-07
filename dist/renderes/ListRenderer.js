@@ -50,22 +50,25 @@ var ListRenderer = function (_BaseRenderer) {
     value: function render() {
       var _this2 = this;
 
-      var title = this.props.title;
+      var label = this.getLabel();
+
+      if (!this.shouldRenderMyself()) return null;
 
       return _react2.default.createElement(
         'div',
         { className: 'panel panel-default' },
         _react2.default.createElement(
           'div',
-          { className: 'panel-heading' },
-          title ? _react2.default.createElement(
+          { className: 'panel-heading', style: { position: "relative" } },
+          label ? _react2.default.createElement(
             'label',
             { forHtml: '' },
-            title
+            label
           ) : null,
+          this._renderHelpText(),
           _react2.default.createElement(
             'button',
-            { className: 'list-add-button', style: { float: "right" }, onClick: function onClick(e) {
+            { className: 'list-add-button', style: { position: "absolute", top: 15, right: 15 }, onClick: function onClick(e) {
                 return _this2._addButtonClicked(e);
               } },
             '+'
@@ -123,6 +126,7 @@ var ListRenderer = function (_BaseRenderer) {
       var _props = this.props;
       var object = _props.object;
       var formOptions = _props.formOptions;
+      var fieldsOptions = _props.fieldsOptions;
       var path = _props.path;
       var data = _props.data;
 
@@ -131,6 +135,7 @@ var ListRenderer = function (_BaseRenderer) {
       var props = {
         object: object,
         formOptions: formOptions,
+        fieldsOptions: fieldsOptions,
         path: this.buildPath(path, 'ofType'),
         title: null,
         data: data,
