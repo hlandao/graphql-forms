@@ -83,9 +83,11 @@
 	    _hidden: true
 	  },
 	  name: {
-	    _label: 'The Label of Name',
-	    _helpText: 'Helper for name',
-	    _placeholder: 'Placeholder for name...'
+	    ofType: {
+	      _label: 'The Label of Name',
+	      _helpText: 'Helper for name',
+	      _placeholder: 'Placeholder for name...'
+	    }
 	  },
 	  nestedExample: {
 	    color: {
@@ -21573,14 +21575,23 @@
 
 	var _graphql = __webpack_require__(177);
 
+	var ColorType = new _graphql.GraphQLEnumType({
+	  name: 'Color',
+	  values: {
+	    RED: { value: 0 },
+	    GREEN: { value: 1 },
+	    BLUE: { value: 2 }
+	  }
+	});
+
 	var NestedType = exports.NestedType = new _graphql.GraphQLObjectType({
 	  name: 'BlackBoxes',
 	  description: '',
 	  fields: function fields() {
 	    return {
 	      color: {
-	        type: _graphql.GraphQLString,
-	        description: 'I\'m the color of the nested object.'
+	        type: ColorType,
+	        description: 'I\'m the color of the nested object. and I\'m enum'
 	      },
 	      description: {
 	        type: _graphql.GraphQLString,
@@ -21600,18 +21611,18 @@
 	        description: 'I\'m the id number of the black box.'
 	      },
 	      name: {
-	        type: _graphql.GraphQLString,
+	        type: new _graphql.GraphQLNonNull(_graphql.GraphQLString),
 	        description: 'I\'m the name of the black box.'
 	      },
 	      description: {
 	        type: _graphql.GraphQLString
 	      },
 	      nestedExample: {
-	        type: NestedType,
+	        type: new _graphql.GraphQLNonNull(NestedType),
 	        description: 'I\'m a nested object type'
 	      },
 	      listExample: {
-	        type: new _graphql.GraphQLList(_graphql.GraphQLString),
+	        type: new _graphql.GraphQLNonNull(new _graphql.GraphQLList(new _graphql.GraphQLNonNull(_graphql.GraphQLString))),
 	        description: 'I\'m a list with string'
 	      },
 	      listWithNestedObjectExample: {
@@ -33685,7 +33696,7 @@
 
 	var _lodash = __webpack_require__(253);
 
-	var _ObjectTypeRenderer = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./renderes/ObjectTypeRenderer\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _ObjectTypeRenderer = __webpack_require__(255);
 
 	var _ObjectTypeRenderer2 = _interopRequireDefault(_ObjectTypeRenderer);
 
@@ -33732,7 +33743,7 @@
 	            { className: 'panel-heading' },
 	            _react2.default.createElement(
 	              'label',
-	              { forHtml: '' },
+	              null,
 	              object.name
 	            )
 	          ),
@@ -50431,6 +50442,911 @@
 		return module;
 	}
 
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _BaseRenderer2 = __webpack_require__(256);
+
+	var _BaseRenderer3 = _interopRequireDefault(_BaseRenderer2);
+
+	var _renderField = __webpack_require__(258);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ObjectTypeRenderer = function (_BaseRenderer) {
+	  _inherits(ObjectTypeRenderer, _BaseRenderer);
+
+	  function ObjectTypeRenderer(props, context) {
+	    _classCallCheck(this, ObjectTypeRenderer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ObjectTypeRenderer).call(this, props, context));
+
+	    _this.state = {
+	      value: {}
+	    };
+	    _this._onChange = _this._onChange.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(ObjectTypeRenderer, [{
+	    key: 'render',
+	    value: function render() {
+	      var title = this.props.title;
+
+
+	      if (!this.shouldRenderMyself()) return null;
+	      return title ? this._renderWithTitle() : this._renderWithoutTitle();
+	    }
+	  }, {
+	    key: '_renderWithTitle',
+	    value: function _renderWithTitle() {
+	      var title = this.props.title;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'panel panel-default' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-heading' },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            title
+	          ),
+	          this._renderHelpText()
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-body' },
+	          this._renderFields()
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_renderWithoutTitle',
+	    value: function _renderWithoutTitle() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this._renderFields()
+	      );
+	    }
+	  }, {
+	    key: '_renderFields',
+	    value: function _renderFields() {
+	      var _this2 = this;
+
+	      var myType = this.myType();
+	      var fields = myType.getFields();
+	      var _props = this.props;
+	      var data = _props.data;
+	      var object = _props.object;
+	      var path = _props.path;
+	      var formOptions = _props.formOptions;
+	      var fieldsOptions = _props.fieldsOptions;
+
+
+	      return Object.keys(fields).map(function (key) {
+	        var field = fields[key];
+
+	        var title = key;
+	        var newPath = _this2.buildPath(path, key);
+	        var onChange = _this2._onChange;
+
+	        return _renderField.renderField.call(_this2, { title: title, object: object, data: data, formOptions: formOptions, fieldsOptions: fieldsOptions, path: newPath, key: key, onChange: onChange }, field.type);
+	      });
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      var _this3 = this;
+
+	      var outputValue = {};
+	      Object.keys(this.nested).map(function (key) {
+	        var ref = _this3.nested[key];
+	        var value = ref.getValue();
+	        outputValue[key] = value;
+	      });
+
+	      return outputValue;
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange(path, value) {
+	      this._onFieldChanged(path, value);
+	    }
+	  }]);
+
+	  return ObjectTypeRenderer;
+	}(_BaseRenderer3.default);
+
+	exports.default = ObjectTypeRenderer;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _typeByPath = __webpack_require__(257);
+
+	var _lodash = __webpack_require__(253);
+
+	var _graphql = __webpack_require__(177);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BaseRenderer = function (_Component) {
+	  _inherits(BaseRenderer, _Component);
+
+	  function BaseRenderer(props, context) {
+	    _classCallCheck(this, BaseRenderer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BaseRenderer).call(this, props, context));
+
+	    _this.nested = {};
+	    _this._onFieldChanged = _this._onFieldChanged.bind(_this);
+	    _this.getValue = _this.getValue.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(BaseRenderer, [{
+	    key: '_renderHelpText',
+	    value: function _renderHelpText() {
+	      var helpText = this.getHelpText();
+	      return helpText ? _react2.default.createElement(
+	        'span',
+	        { className: 'help-block' },
+	        helpText
+	      ) : null;
+	    }
+	  }, {
+	    key: 'myType',
+	    value: function myType() {
+	      var _props = this.props;
+	      var object = _props.object;
+	      var path = _props.path;
+
+	      return (0, _typeByPath.typeByPath)(object, path);
+	    }
+	  }, {
+	    key: 'myField',
+	    value: function myField() {
+	      var _props2 = this.props;
+	      var object = _props2.object;
+	      var path = _props2.path;
+
+	      return (0, _typeByPath.fieldByPath)(object, path);
+	    }
+	  }, {
+	    key: 'buildPath',
+	    value: function buildPath(parentPath, keyName) {
+	      parentPath = parentPath || "";
+	      keyName = keyName || "";
+
+	      var myPath = parentPath;
+	      myPath += keyName && parentPath ? '.' : '';
+	      myPath += keyName;
+
+	      return myPath;
+	    }
+	  }, {
+	    key: 'myNestedLevel',
+	    value: function myNestedLevel() {
+	      return this.props.path ? this.props.path.split('.').length : 1;
+	    }
+	  }, {
+	    key: 'myFieldOptions',
+	    value: function myFieldOptions() {
+	      return this.getFieldOptions(this.props.path);
+	    }
+	  }, {
+	    key: '_onFieldChanged',
+	    value: function _onFieldChanged(path, value) {
+	      var onChange = this.props.onChange;
+
+	      onChange && onChange(path, value);
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      return null;
+	    }
+	  }, {
+	    key: 'getFieldOptions',
+	    value: function getFieldOptions(path) {
+	      var arr = path ? path.split('.') : [];
+	      return (0, _lodash.reduce)(arr, function (fieldsOptions, key) {
+	        return fieldsOptions[key] || {};
+	      }, this.props.fieldsOptions);
+	    }
+	  }, {
+	    key: 'getPlaceholder',
+	    value: function getPlaceholder() {
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions._placeholder || "";
+	    }
+	  }, {
+	    key: 'getLabel',
+	    value: function getLabel() {
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions._label || this.props.title;
+	    }
+	  }, {
+	    key: 'getHelpText',
+	    value: function getHelpText() {
+	      var myField = this.myField();
+	      var fieldOptions = this.myFieldOptions();
+	      return fieldOptions.helpText ? fieldOptions.helpText : myField ? myField.description : "";
+	    }
+	  }, {
+	    key: 'shouldRenderMyself',
+	    value: function shouldRenderMyself() {
+	      var formOptions = this.props.formOptions;
+
+	      return !this.isHidden() && this.myNestedLevel() <= formOptions.nestedLevels;
+	    }
+	  }, {
+	    key: 'isHidden',
+	    value: function isHidden() {
+	      var fieldOptions = this.myFieldOptions();
+	      if ((0, _lodash.isFunction)(fieldOptions._hidden)) {
+	        fieldOptions._hidden(this.getValue());
+	      } else {
+	        return !!fieldOptions._hidden;
+	      }
+	    }
+	  }]);
+
+	  return BaseRenderer;
+	}(_react.Component);
+
+	exports.default = BaseRenderer;
+
+
+	BaseRenderer.propTypes = {
+	  object: _react.PropTypes.object.isRequired,
+	  formOptions: _react.PropTypes.object.isRequired,
+	  fieldsOptions: _react.PropTypes.object.isRequired,
+	  path: _react.PropTypes.string,
+	  title: _react.PropTypes.string,
+	  data: _react.PropTypes.object,
+	  onChange: _react.PropTypes.func
+	};
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.typeByPath = typeByPath;
+	exports.fieldByPath = fieldByPath;
+
+	var _graphql = __webpack_require__(177);
+
+	function typeByPath(gqlType, path) {
+	  if (!path) {
+	    return gqlType.type ? gqlType.type : gqlType;
+	  }
+
+	  var arr = path.split('.');
+
+	  return _.reduce(arr, function (parent, keyName) {
+
+	    var parentType = parent.type || parent;
+	    if (!parentType) {
+	      throw 'gqlType must be GraphQL Type';
+	    }
+
+	    if (!keyName) {
+	      return parentType;
+	    }
+
+	    switch (parentType.constructor) {
+	      case _graphql.GraphQLObjectType:
+	        return parentType.getFields()[keyName].type;
+	        break;
+	      case _graphql.GraphQLList:
+	        return parentType.ofType;
+	        break;
+	      case _graphql.GraphQLNonNull:
+	        return parentType.ofType;
+	        break;
+	    }
+	  }, gqlType);
+	}
+
+	function fieldByPath(gqlType, path) {
+	  if (!path) {
+	    return gqlType.type ? gqlType.type : gqlType;
+	  }
+
+	  var arr = path.split('.');
+
+	  // We don't want to return "field" for the embedded list ofType;
+	  if (arr[arr.length - 1] == 'ofType') return null;
+
+	  return _.reduce(arr, function (parent, keyName) {
+
+	    var parentType = parent.type || parent;
+	    if (!parentType) {
+	      throw 'gqlType must be GraphQL Type';
+	    }
+
+	    if (!keyName) {
+	      return parentType;
+	    }
+
+	    switch (parentType.constructor) {
+	      case _graphql.GraphQLObjectType:
+	        return parentType.getFields()[keyName];
+	        break;
+	      case _graphql.GraphQLList:
+	        return parentType.ofType;
+	        break;
+	      case _graphql.GraphQLNonNull:
+	        return parentType.ofType;
+	        break;
+	    }
+	  }, gqlType);
+	}
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.renderField = renderField;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _graphql = __webpack_require__(177);
+
+	var _ScalarTypeRenderer = __webpack_require__(259);
+
+	var _ScalarTypeRenderer2 = _interopRequireDefault(_ScalarTypeRenderer);
+
+	var _ListRenderer = __webpack_require__(260);
+
+	var _ListRenderer2 = _interopRequireDefault(_ListRenderer);
+
+	var _EnumTypeRenderer = __webpack_require__(261);
+
+	var _EnumTypeRenderer2 = _interopRequireDefault(_EnumTypeRenderer);
+
+	var _ObjectTypeRenderer = __webpack_require__(255);
+
+	var _ObjectTypeRenderer2 = _interopRequireDefault(_ObjectTypeRenderer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function renderField(props, type) {
+	  var _this = this;
+
+	  switch (type.constructor) {
+	    case _graphql.GraphQLScalarType:
+	      console.log('GraphQLScalarType props.path', props.path);
+	      return _react2.default.createElement(_ScalarTypeRenderer2.default, _extends({}, props, { ref: function ref(r) {
+	          _this.nested[props.key] = r;
+	        } }));
+	      break;
+	    case _graphql.GraphQLObjectType:
+	    case _graphql.GraphQLInputObjectType:
+	      return _react2.default.createElement(_ObjectTypeRenderer2.default, _extends({}, props, { ref: function ref(r) {
+	          _this.nested[props.key] = r;
+	        } }));
+	      break;
+	    case _graphql.GraphQLEnumType:
+	      return _react2.default.createElement(_EnumTypeRenderer2.default, _extends({}, props, { ref: function ref(r) {
+	          _this.nested[props.key] = r;
+	        } }));
+	      break;
+	    case _graphql.GraphQLList:
+	      return _react2.default.createElement(_ListRenderer2.default, _extends({}, props, { ref: function ref(r) {
+	          _this.nested[props.key] = r;
+	        } }));
+	      break;
+	    case _graphql.GraphQLNonNull:
+	      props.path = props.path + '.ofType';
+	      console.log('GraphQLNonNull props.path', props.path, type);
+	      return renderField.call(this, props, type.ofType);
+	      break;
+	  }
+
+	  return null;
+	}
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _BaseRenderer2 = __webpack_require__(256);
+
+	var _BaseRenderer3 = _interopRequireDefault(_BaseRenderer2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ScalarTypeRenderer = function (_BaseRenderer) {
+	  _inherits(ScalarTypeRenderer, _BaseRenderer);
+
+	  function ScalarTypeRenderer(props, context) {
+	    _classCallCheck(this, ScalarTypeRenderer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ScalarTypeRenderer).call(this, props, context));
+
+	    _this._onChange = _this._onChange.bind(_this);
+	    _this.state = {
+	      value: ''
+	    };
+	    return _this;
+	  }
+
+	  _createClass(ScalarTypeRenderer, [{
+	    key: 'render',
+	    value: function render() {
+	      var label = this.getLabel();
+
+	      if (!this.shouldRenderMyself()) return null;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        label ? _react2.default.createElement(
+	          'label',
+	          null,
+	          label,
+	          ' '
+	        ) : null,
+	        this._renderInput(),
+	        this._renderHelpText()
+	      );
+	    }
+	  }, {
+	    key: '_renderInput',
+	    value: function _renderInput() {
+	      var _this2 = this;
+
+	      var placeholder = this.getPlaceholder();
+	      return _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
+	          _this2.input = _ref;
+	        } });
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange(e) {
+	      var _props = this.props;
+	      var onChange = _props.onChange;
+	      var path = _props.path;
+
+	      var value = e.target.value;
+	      this.setState({ value: value });
+	      onChange(path, value);
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      return this.input ? this.input.value : "";
+	    }
+	  }]);
+
+	  return ScalarTypeRenderer;
+	}(_BaseRenderer3.default);
+
+	exports.default = ScalarTypeRenderer;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _BaseRenderer2 = __webpack_require__(256);
+
+	var _BaseRenderer3 = _interopRequireDefault(_BaseRenderer2);
+
+	var _renderField = __webpack_require__(258);
+
+	var _graphql = __webpack_require__(177);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ListRenderer = function (_BaseRenderer) {
+	  _inherits(ListRenderer, _BaseRenderer);
+
+	  function ListRenderer(props, context) {
+	    _classCallCheck(this, ListRenderer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ListRenderer).call(this, props, context));
+
+	    _this.state = {
+	      nestedArr: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(ListRenderer, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this._addNewItem();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var label = this.getLabel();
+
+	      if (!this.shouldRenderMyself()) return null;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'panel panel-default' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-heading', style: { position: "relative" } },
+	          label ? _react2.default.createElement(
+	            'label',
+	            null,
+	            label
+	          ) : null,
+	          this._renderHelpText(),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'list-add-button', style: { position: "absolute", top: 15, right: 15 }, onClick: function onClick(e) {
+	                return _this2._addButtonClicked(e);
+	              } },
+	            '+'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-body' },
+	          this._renderList()
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_renderList',
+	    value: function _renderList() {
+	      var type = this.myType();
+	      var ofType = type.ofType;
+
+	      switch (ofType.constructor) {
+	        case _graphql.GraphQLObjectType:
+	          return this._renderListOfObjectType();
+	          break;
+	        case _graphql.GraphQLNonNull:
+	          return this._renderListOfNonNullType();
+	          break;
+	        default:
+	          return this._renderListOfScalarType();
+	      }
+	    }
+	  }, {
+	    key: '_renderListOfScalarType',
+	    value: function _renderListOfScalarType() {
+	      var _this3 = this;
+
+	      return this.state.nestedArr.map(function (nestedObj) {
+	        return _this3._renderNestedField(nestedObj);
+	      });
+	    }
+	  }, {
+	    key: '_renderListOfObjectType',
+	    value: function _renderListOfObjectType() {
+	      var _this4 = this;
+
+	      return this.state.nestedArr.map(function (nestedObj) {
+	        return _this4._renderNestedField(nestedObj);
+	      });
+	    }
+	  }, {
+	    key: '_renderListOfNonNullType',
+	    value: function _renderListOfNonNullType() {
+	      var _this5 = this;
+
+	      return this.state.nestedArr.map(function (nestedObj) {
+	        return _this5._renderNestedField(nestedObj);
+	      });
+	    }
+	  }, {
+	    key: '_renderNestedField',
+	    value: function _renderNestedField(nestedObj) {
+	      var _this6 = this;
+
+	      if (nestedObj.deleted) return null;
+
+	      var type = this.myType();
+	      var fieldType = type.ofType;
+
+	      var _props = this.props;
+	      var object = _props.object;
+	      var formOptions = _props.formOptions;
+	      var fieldsOptions = _props.fieldsOptions;
+	      var path = _props.path;
+	      var data = _props.data;
+
+	      var onChange = this._onFieldChanged;
+
+	      var props = {
+	        object: object,
+	        formOptions: formOptions,
+	        fieldsOptions: fieldsOptions,
+	        path: this.buildPath(path, 'ofType'),
+	        title: null,
+	        data: data,
+	        key: nestedObj.key,
+	        onChange: onChange
+	      };
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'panel panel-default', key: nestedObj.key },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-heading' },
+	          nestedObj.title,
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'list-add-button', style: { float: "right" }, onClick: function onClick(e) {
+	                return _this6._removeButtonClicked(e, nestedObj);
+	              } },
+	            '-'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'panel-body' },
+	          _renderField.renderField.call(this, props, fieldType)
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_addButtonClicked',
+	    value: function _addButtonClicked(e) {
+	      e.preventDefault();
+	      e.stopPropagation();
+	      this._addNewItem();
+	    }
+	  }, {
+	    key: '_addNewItem',
+	    value: function _addNewItem() {
+	      var title = this.props.title;
+	      var nestedArr = this.state.nestedArr;
+
+
+	      nestedArr.push({ deleted: false, title: title + '_' + (nestedArr.length + 1), key: nestedArr.length });
+	      this.setState({ nestedArr: nestedArr });
+	    }
+	  }, {
+	    key: '_removeButtonClicked',
+	    value: function _removeButtonClicked(e, nestedObj) {
+	      e.preventDefault();
+	      e.stopPropagation();
+
+	      nestedObj.deleted = true;
+	      var nestedArr = this.state.nestedArr;
+	      this.setState({ nestedArr: nestedArr });
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      var _this7 = this;
+
+	      var nestedArr = this.state.nestedArr;
+
+	      var outputValue = [];
+	      Object.keys(this.nested).map(function (key) {
+
+	        var index = parseInt(key);
+	        if (nestedArr[index].deleted) return;
+
+	        var ref = _this7.nested[key];
+	        var value = ref.getValue();
+	        outputValue.push(value);
+	      });
+
+	      return outputValue;
+	    }
+	  }]);
+
+	  return ListRenderer;
+	}(_BaseRenderer3.default);
+
+	exports.default = ListRenderer;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _BaseRenderer2 = __webpack_require__(256);
+
+	var _BaseRenderer3 = _interopRequireDefault(_BaseRenderer2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EnumTypeRenderer = function (_BaseRenderer) {
+	  _inherits(EnumTypeRenderer, _BaseRenderer);
+
+	  function EnumTypeRenderer(props, context) {
+	    _classCallCheck(this, EnumTypeRenderer);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EnumTypeRenderer).call(this, props, context));
+
+	    _this._onChange = _this._onChange.bind(_this);
+	    _this.state = {
+	      value: ''
+	    };
+	    return _this;
+	  }
+
+	  _createClass(EnumTypeRenderer, [{
+	    key: 'render',
+	    value: function render() {
+	      var label = this.getLabel();
+
+	      if (!this.shouldRenderMyself()) return null;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        label ? _react2.default.createElement(
+	          'label',
+	          null,
+	          label,
+	          ' '
+	        ) : null,
+	        this._renderInput(),
+	        this._renderHelpText()
+	      );
+	    }
+	  }, {
+	    key: '_renderInput',
+	    value: function _renderInput() {
+	      var _this2 = this;
+
+	      var values = this.myType().getValues();
+
+	      return _react2.default.createElement(
+	        'select',
+	        { type: 'text',
+	          className: 'form-control',
+	          onChange: this._onChange,
+	          ref: function ref(_ref) {
+	            _this2.input = _ref;
+	          } },
+	        values.map(function (value) {
+	          return _react2.default.createElement(
+	            'option',
+	            { value: value.value, key: value.name },
+	            value.name
+	          );
+	        })
+	      );
+	    }
+	  }, {
+	    key: '_onChange',
+	    value: function _onChange(e) {
+	      var _props = this.props;
+	      var onChange = _props.onChange;
+	      var path = _props.path;
+
+	      var value = e.target.value;
+	      this.setState({ value: value });
+	      onChange(path, value);
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      return this.input ? this.input.value : "";
+	    }
+	  }]);
+
+	  return EnumTypeRenderer;
+	}(_BaseRenderer3.default);
+
+	exports.default = EnumTypeRenderer;
 
 /***/ }
 /******/ ]);

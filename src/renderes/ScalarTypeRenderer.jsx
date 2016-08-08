@@ -19,7 +19,7 @@ export default class ScalarTypeRenderer extends BaseRenderer {
 
     return (
       <div className="form-group">
-        {label ? <label forHtml="">{label} </label> : null}
+        {label ? <label>{label} </label> : null}
         {this._renderInput()}
         {this._renderHelpText()}
       </div>

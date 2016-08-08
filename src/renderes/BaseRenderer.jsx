@@ -89,7 +89,6 @@ BaseRenderer.propTypes = {
   fieldsOptions: PropTypes.object.isRequired,
   path: PropTypes.string,
   title: PropTypes.string,
-  key: PropTypes.string,
   data: PropTypes.object,
   onChange: PropTypes.func
 }

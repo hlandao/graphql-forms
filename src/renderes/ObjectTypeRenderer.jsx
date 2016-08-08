@@ -23,7 +23,7 @@ export default class ObjectTypeRenderer extends BaseRenderer {
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
-          <label forHtml="">{title}</label>
+          <label>{title}</label>
           {this._renderHelpText()}
         </div>
         <div className="panel-body">

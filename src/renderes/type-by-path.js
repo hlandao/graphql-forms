@@ -1,6 +1,7 @@
 import {
   GraphQLObjectType,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } from 'graphql'
 
 export function typeByPath(gqlType, path) {
@@ -27,6 +28,9 @@ export function typeByPath(gqlType, path) {
         return parentType.getFields()[keyName].type;
         break;
       case GraphQLList:
+        return parentType.ofType;
+        break;
+      case GraphQLNonNull:
         return parentType.ofType;
         break;
     }
@@ -59,6 +63,9 @@ export function fieldByPath(gqlType, path) {
         return parentType.getFields()[keyName];
         break;
       case GraphQLList:
+        return parentType.ofType;
+        break;
+      case GraphQLNonNull:
         return parentType.ofType;
         break;
     }

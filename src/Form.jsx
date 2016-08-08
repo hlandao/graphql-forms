@@ -15,7 +15,7 @@ class Form extends Component {
     return (
       <form className="gql-form" onSubmit={this.onSubmit}>
         <div className="panel panel-default">
-          <div className="panel-heading"><label forHtml="">{object.name}</label></div>
+          <div className="panel-heading"><label>{object.name}</label></div>
           <div className="panel-body">
             <ObjectTypeRenderer object={object}
                                 data={data}

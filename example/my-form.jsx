@@ -8,9 +8,11 @@ const FIELDS_OPTIONS = {
     _hidden: true
   },
   name: {
-    _label: 'The Label of Name',
-    _helpText: 'Helper for name',
-    _placeholder: 'Placeholder for name...'
+    ofType: {
+      _label: 'The Label of Name',
+      _helpText: 'Helper for name',
+      _placeholder: 'Placeholder for name...'
+    }
   },
   nestedExample: {
     color: {

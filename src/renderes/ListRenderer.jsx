@@ -4,6 +4,7 @@ import {renderField} from './render-field';
 
 import {
   GraphQLObjectType,
+  GraphQLNonNull,
 } from 'graphql'
 
 export default class ListRenderer extends BaseRenderer {
@@ -27,7 +28,7 @@ export default class ListRenderer extends BaseRenderer {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" style={{position:"relative"}}>
-          {label ? (<label forHtml="">{label}</label>) : null}
+          {label ? (<label>{label}</label>) : null}
           {this._renderHelpText()}
           <button className="list-add-button" style={{position:"absolute", top: 15, right: 15}} onClick={(e) => this._addButtonClicked(e)}>
             +
@@ -48,6 +49,9 @@ export default class ListRenderer extends BaseRenderer {
       case GraphQLObjectType:
         return this._renderListOfObjectType()
         break;
+      case GraphQLNonNull:
+        return this._renderListOfNonNullType()
+        break;
       default:
         return this._renderListOfScalarType()
     }
@@ -58,6 +62,10 @@ export default class ListRenderer extends BaseRenderer {
   }
 
   _renderListOfObjectType() {
+    return this.state.nestedArr.map((nestedObj) => this._renderNestedField(nestedObj))
+  }
+
+  _renderListOfNonNullType() {
     return this.state.nestedArr.map((nestedObj) => this._renderNestedField(nestedObj))
   }
 

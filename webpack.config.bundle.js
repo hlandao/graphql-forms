@@ -4,6 +4,9 @@ var webpack = require('webpack');
 module.exports = {
   entry: './example/main.js',
   output: { path: __dirname + '/example', filename: 'bundle.js' },
+  resolve: {
+    extensions: ['','.js','.jsx']
+  },
   module: {
     loaders: [
       {
