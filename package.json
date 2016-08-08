@@ -1,11 +1,12 @@
 {
   "name": "graphql-forms",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Auto generated Graphql Forms with React",
   "main": "dist/index.js",
   "scripts": {
     "start": "rm example/bundle.js > /dev/null 2>&1 & webpack-dev-server --config webpack.config.dev.js --content-base example/ --progress --colors",
-    "build": "rm -rf dist & babel src -d dist/ & webpack --config webpack.config.bundle.js"
+    "build": "rm -rf dist & babel src -d dist/ & webpack --config webpack.config.bundle.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
