@@ -20,23 +20,29 @@ export default class ObjectTypeRenderer extends BaseRenderer {
   }
   _renderWithTitle() {
     const {title} = this.props;
+    const fieldOptions = this.myFieldOptions();
+
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <label>{title}</label>
-          {this._renderHelpText()}
+      <fieldset className={fieldOptions._inline ? 'form-inline' : ''}>
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <label>{title}</label>
+            {this._renderHelpText()}
+          </div>
+          <div className="panel-body">
+            {this._renderFields()}
+          </div>
         </div>
-        <div className="panel-body">
-          {this._renderFields()}
-        </div>
-      </div>
+      </fieldset>
     )
   }
   _renderWithoutTitle() {
+    const fieldOptions = this.myFieldOptions();
+
     return (
-      <div>
+      <fieldset className={fieldOptions._inline ? 'form-inline' : ''}>
         {this._renderFields()}
-      </div>
+      </fieldset>
     )
   }
   _renderFields() {

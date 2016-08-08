@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {typeByPath, fieldByPath} from './type-by-path.js'
 import {isFunction} from 'lodash';
-import {GraphQLScalarType} from 'graphql';
+import {GraphQLScalarType, GraphQLNonNull} from 'graphql';
 import {reduce} from 'lodash';
 
 export default class BaseRenderer extends Component {
@@ -14,6 +14,11 @@ export default class BaseRenderer extends Component {
   }
 
   _renderHelpText() {
+    const parentPath = this.myParentPath();
+    const parentFieldOptions = parentPath ? this.getFieldOptions(parentPath) : null;
+    if(parentFieldOptions && parentFieldOptions._inline) {
+      return null;
+    }
     const helpText = this.getHelpText();
     return helpText ? (<span className="help-block">{helpText}</span>) : null;
   }
@@ -21,6 +26,34 @@ export default class BaseRenderer extends Component {
   myType() {
     const {object, path} = this.props;
     return typeByPath(object, path);
+  }
+  myParentType() {
+    const {object, path} = this.props;
+    let foundParent = null;
+    let arr = path.split('.');
+    do {
+      arr.pop();
+      let parent = typeByPath(object, arr.join('.'));
+      if(parent.constructor != GraphQLNonNull) {
+        foundParent = parent;
+      }
+    } while (arr.length && !foundParent)
+
+    return foundParent;
+  }
+  myParentPath() {
+    const {object, path} = this.props;
+    let foundPath = null;
+    let arr = path.split('.');
+    do {
+      arr.pop();
+      let parent = typeByPath(object, arr.join('.'));
+      if(parent.constructor != GraphQLNonNull) {
+        foundPath = arr.join('.');
+      }
+    } while (arr.length && !foundPath)
+
+    return foundPath;
   }
   myField() {
     const {object, path} = this.props;

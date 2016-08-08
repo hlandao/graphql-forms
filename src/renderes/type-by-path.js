@@ -1,5 +1,6 @@
 import {
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull
 } from 'graphql'
@@ -24,6 +25,7 @@ export function typeByPath(gqlType, path) {
 
 
     switch (parentType.constructor) {
+      case GraphQLInputObjectType:
       case GraphQLObjectType:
         return parentType.getFields()[keyName].type;
         break;
@@ -60,6 +62,7 @@ export function fieldByPath(gqlType, path) {
 
     switch (parentType.constructor) {
       case GraphQLObjectType:
+      case GraphQLInputObjectType:
         return parentType.getFields()[keyName];
         break;
       case GraphQLList:

@@ -89,11 +89,19 @@
 	      _placeholder: 'Placeholder for name...'
 	    }
 	  },
+	  description: {
+	    _textType: 'textarea'
+	  },
 	  nestedExample: {
-	    color: {
-	      _hidden: true
+	    ofType: {
+	      _inline: true,
+	      color: {}
 	    }
 	  }
+	};
+
+	var FORM_OPTIONS = {
+	  nestedLevels: 10
 	};
 
 	var App = function (_Component) {
@@ -124,7 +132,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-md-8' },
-	            _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, fieldsOptions: FIELDS_OPTIONS, onChange: function onChange() {
+	            _react2.default.createElement(_Form2.default, { object: _garphqTypes.BlackBoxType, formOptions: FORM_OPTIONS, fieldsOptions: FIELDS_OPTIONS, onChange: function onChange() {
 	                return _this2.onChange.apply(_this2, arguments);
 	              }, onSubmit: function onSubmit() {
 	                return _this2.onSubmit.apply(_this2, arguments);
@@ -50502,32 +50510,40 @@
 	    value: function _renderWithTitle() {
 	      var title = this.props.title;
 
+	      var fieldOptions = this.myFieldOptions();
+
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'panel panel-default' },
+	        'fieldset',
+	        { className: fieldOptions._inline ? 'form-inline' : '' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'panel-heading' },
+	          { className: 'panel panel-default' },
 	          _react2.default.createElement(
-	            'label',
-	            null,
-	            title
+	            'div',
+	            { className: 'panel-heading' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              title
+	            ),
+	            this._renderHelpText()
 	          ),
-	          this._renderHelpText()
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'panel-body' },
-	          this._renderFields()
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'panel-body' },
+	            this._renderFields()
+	          )
 	        )
 	      );
 	    }
 	  }, {
 	    key: '_renderWithoutTitle',
 	    value: function _renderWithoutTitle() {
+	      var fieldOptions = this.myFieldOptions();
+
 	      return _react2.default.createElement(
-	        'div',
-	        null,
+	        'fieldset',
+	        { className: fieldOptions._inline ? 'form-inline' : '' },
 	        this._renderFields()
 	      );
 	    }
@@ -50629,6 +50645,11 @@
 	  _createClass(BaseRenderer, [{
 	    key: '_renderHelpText',
 	    value: function _renderHelpText() {
+	      var parentPath = this.myParentPath();
+	      var parentFieldOptions = parentPath ? this.getFieldOptions(parentPath) : null;
+	      if (parentFieldOptions && parentFieldOptions._inline) {
+	        return null;
+	      }
 	      var helpText = this.getHelpText();
 	      return helpText ? _react2.default.createElement(
 	        'span',
@@ -50646,11 +50667,49 @@
 	      return (0, _typeByPath.typeByPath)(object, path);
 	    }
 	  }, {
-	    key: 'myField',
-	    value: function myField() {
+	    key: 'myParentType',
+	    value: function myParentType() {
 	      var _props2 = this.props;
 	      var object = _props2.object;
 	      var path = _props2.path;
+
+	      var foundParent = null;
+	      var arr = path.split('.');
+	      do {
+	        arr.pop();
+	        var parent = (0, _typeByPath.typeByPath)(object, arr.join('.'));
+	        if (parent.constructor != _graphql.GraphQLNonNull) {
+	          foundParent = parent;
+	        }
+	      } while (arr.length && !foundParent);
+
+	      return foundParent;
+	    }
+	  }, {
+	    key: 'myParentPath',
+	    value: function myParentPath() {
+	      var _props3 = this.props;
+	      var object = _props3.object;
+	      var path = _props3.path;
+
+	      var foundPath = null;
+	      var arr = path.split('.');
+	      do {
+	        arr.pop();
+	        var parent = (0, _typeByPath.typeByPath)(object, arr.join('.'));
+	        if (parent.constructor != _graphql.GraphQLNonNull) {
+	          foundPath = arr.join('.');
+	        }
+	      } while (arr.length && !foundPath);
+
+	      return foundPath;
+	    }
+	  }, {
+	    key: 'myField',
+	    value: function myField() {
+	      var _props4 = this.props;
+	      var object = _props4.object;
+	      var path = _props4.path;
 
 	      return (0, _typeByPath.fieldByPath)(object, path);
 	    }
@@ -50783,6 +50842,7 @@
 	    }
 
 	    switch (parentType.constructor) {
+	      case _graphql.GraphQLInputObjectType:
 	      case _graphql.GraphQLObjectType:
 	        return parentType.getFields()[keyName].type;
 	        break;
@@ -50819,6 +50879,7 @@
 
 	    switch (parentType.constructor) {
 	      case _graphql.GraphQLObjectType:
+	      case _graphql.GraphQLInputObjectType:
 	        return parentType.getFields()[keyName];
 	        break;
 	      case _graphql.GraphQLList:
@@ -50874,7 +50935,6 @@
 
 	  switch (type.constructor) {
 	    case _graphql.GraphQLScalarType:
-	      console.log('GraphQLScalarType props.path', props.path);
 	      return _react2.default.createElement(_ScalarTypeRenderer2.default, _extends({}, props, { ref: function ref(r) {
 	          _this.nested[props.key] = r;
 	        } }));
@@ -50897,7 +50957,6 @@
 	      break;
 	    case _graphql.GraphQLNonNull:
 	      props.path = props.path + '.ofType';
-	      console.log('GraphQLNonNull props.path', props.path, type);
 	      return renderField.call(this, props, type.ofType);
 	      break;
 	  }
@@ -50974,9 +51033,19 @@
 	      var _this2 = this;
 
 	      var placeholder = this.getPlaceholder();
-	      return _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
-	          _this2.input = _ref;
-	        } });
+	      var fieldOptions = this.myFieldOptions();
+	      var textType = fieldOptions._textType || "";
+
+	      switch (textType) {
+	        case 'textarea':
+	          return _react2.default.createElement('textarea', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
+	              _this2.input = _ref;
+	            } });
+	        default:
+	          return _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref2) {
+	              _this2.input = _ref2;
+	            } });
+	      }
 	    }
 	  }, {
 	    key: '_onChange',

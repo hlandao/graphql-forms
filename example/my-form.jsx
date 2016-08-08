@@ -14,11 +14,20 @@ const FIELDS_OPTIONS = {
       _placeholder: 'Placeholder for name...'
     }
   },
+  description: {
+    _textType: 'textarea'
+  },
   nestedExample: {
-    color: {
-      _hidden: true
+    ofType: {
+      _inline: true,
+      color: {
+      }
     }
   }
+}
+
+const FORM_OPTIONS = {
+  nestedLevels: 10
 }
 
 class App extends Component {
@@ -34,7 +43,7 @@ class App extends Component {
       <div className="container">
         <div className="row">
           <div className="col-md-8">
-            <Form object={BlackBoxType} fieldsOptions={FIELDS_OPTIONS} onChange={(...args) => this.onChange(...args)} onSubmit={(...args) => this.onSubmit(...args)}/>
+            <Form object={BlackBoxType} formOptions={FORM_OPTIONS} fieldsOptions={FIELDS_OPTIONS} onChange={(...args) => this.onChange(...args)} onSubmit={(...args) => this.onSubmit(...args)}/>
           </div>
           <div className="col-md-4">
             <div className="panel panel-default">

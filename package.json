@@ -1,6 +1,6 @@
 {
   "name": "graphql-forms",
-  "version": "0.0.24",
+  "version": "0.0.27",
   "description": "Auto generated Graphql Forms with React",
   "main": "dist/index.js",
   "scripts": {

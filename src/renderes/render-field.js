@@ -16,7 +16,6 @@ export function renderField(props, type) {
 
   switch (type.constructor) {
     case GraphQLScalarType:
-      console.log('GraphQLScalarType props.path', props.path);
       return <ScalarTypeRenderer {...props} ref={(r) => {this.nested[props.key] = r;}} />;
       break;
     case GraphQLObjectType:
@@ -31,7 +30,6 @@ export function renderField(props, type) {
       break;
     case GraphQLNonNull:
       props.path = props.path + '.ofType';
-      console.log('GraphQLNonNull props.path',props.path,type);
       return renderField.call(this, props, type.ofType);
       break;
   }
