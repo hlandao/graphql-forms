@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 
-import BaseRenderer from './BaseRenderer.jsx';
+import BaseRenderer from './BaseRenderer';
 
 export default class EnumTypeRenderer extends BaseRenderer {
   constructor(props, context) {

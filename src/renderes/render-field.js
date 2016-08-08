@@ -5,10 +5,10 @@ import {
   GraphQLEnumType,
   GraphQLList
 } from 'graphql'
-import ScalarTypeRenderer from './ScalarTypeRenderer.jsx';
-import ListRenderer from './ListRenderer.jsx';
-import EnumTypeRenderer from './EnumTypeRenderer.jsx';
-import ObjectTypeRenderer from './ObjectTypeRenderer.jsx';
+import ScalarTypeRenderer from './ScalarTypeRenderer';
+import ListRenderer from './ListRenderer';
+import EnumTypeRenderer from './EnumTypeRenderer';
+import ObjectTypeRenderer from './ObjectTypeRenderer';
 
 export function renderField(props, type) {
 

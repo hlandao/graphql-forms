@@ -1,6 +1,6 @@
 {
   "name": "graphql-forms",
-  "version": "0.0.7",
+  "version": "0.0.14",
   "description": "Auto generated Graphql Forms with React",
   "main": "dist/index.js",
   "scripts": {
@@ -39,7 +39,6 @@
     "graphql": "^0.6.2",
     "lodash": "^4.14.1",
     "react": "^15.3.0",
-    "react-auto-form": "^1.3.0",
     "react-dom": "^15.3.0"
   }
 }

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {isFunction, capitalize} from 'lodash'
-import ObjectTypeRenderer from './renderes/ObjectTypeRenderer.jsx'
+import ObjectTypeRenderer from './renderes/ObjectTypeRenderer'
 
 class Form extends Component {
   constructor(props, context) {

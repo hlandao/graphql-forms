@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from "react";
-import BaseRenderer from './BaseRenderer.jsx';
-import {renderField} from './render-field.js';
+import BaseRenderer from './BaseRenderer';
+import {renderField} from './render-field';
 
 import {
   GraphQLObjectType,
