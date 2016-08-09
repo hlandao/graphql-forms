@@ -14,10 +14,11 @@ class Form extends Component {
     const {object, data, formOptions, fieldsOptions} = this.props
 
     const submitTitle = formOptions.submitButton && formOptions.submitButton.title ? formOptions.submitButton.title : "Submit";
+    const title = formOptions.title || object.name;
     return (
       <form className="gql-form" onSubmit={this.onSubmit}>
         <div className="panel panel-default">
-          <div className="panel-heading"><label>{object.name}</label></div>
+          <div className="panel-heading"><label>{title}</label></div>
           <div className="panel-body">
             <ObjectTypeRenderer object={object}
                                 data={data}
@@ -65,7 +66,8 @@ Form.defaultProps = {
     nestedLevels: 3,
     submitButton: {
       title: "Submit"
-    }
+    },
+    title: ""
   },
   fieldsOptions: {}
 }
