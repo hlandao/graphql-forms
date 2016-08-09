@@ -27113,7 +27113,9 @@
 	    ofType: {
 	      _label: 'The Label of Name',
 	      _helpText: 'Helper for name',
-	      _placeholder: 'Placeholder for name...'
+	      _placeholder: 'Placeholder for name...',
+	      _textType: 'select',
+	      _enum: ['John', 'James', 'David']
 	    }
 	  },
 	  description: {
@@ -39423,6 +39425,7 @@
 
 
 	      var submitTitle = formOptions.submitButton && formOptions.submitButton.title ? formOptions.submitButton.title : "Submit";
+	      var title = formOptions.title || object.name;
 	      return _react2.default.createElement(
 	        'form',
 	        { className: 'gql-form', onSubmit: this.onSubmit },
@@ -39435,7 +39438,7 @@
 	            _react2.default.createElement(
 	              'label',
 	              null,
-	              object.name
+	              title
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -39500,7 +39503,8 @@
 	    nestedLevels: 3,
 	    submitButton: {
 	      title: "Submit"
-	    }
+	    },
+	    title: ""
 	  },
 	  fieldsOptions: {}
 	};
@@ -56731,9 +56735,28 @@
 	          return _react2.default.createElement('textarea', _extends({ type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref) {
 	              _this2.input = _ref;
 	            } }, extraProps, { defaultValue: defaultValue }));
+	        case 'select':
+	          var values = fieldOptions._enum || [];
+	          return _react2.default.createElement(
+	            'select',
+	            _extends({ type: 'text',
+	              className: 'form-control',
+	              onChange: this._onChange,
+	              ref: function ref(_ref2) {
+	                _this2.input = _ref2;
+	              },
+	              defaultValue: defaultValue }, extraProps),
+	            values.map(function (value) {
+	              return _react2.default.createElement(
+	                'option',
+	                { value: value, key: value },
+	                value
+	              );
+	            })
+	          );
 	        default:
-	          return _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref2) {
-	              _this2.input = _ref2;
+	          return _react2.default.createElement('input', _extends({ type: 'text', className: 'form-control', placeholder: placeholder, onChange: this._onChange, ref: function ref(_ref3) {
+	              _this2.input = _ref3;
 	            } }, extraProps, { defaultValue: defaultValue }));
 	      }
 	    }
