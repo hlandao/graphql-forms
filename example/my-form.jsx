@@ -10,7 +10,9 @@ const FIELDS_OPTIONS = {
     ofType: {
       _label: 'The Label of Name',
       _helpText: 'Helper for name',
-      _placeholder: 'Placeholder for name...'
+      _placeholder: 'Placeholder for name...',
+      _textType: 'select',
+      _enum: ['John','James', 'David']
     }
   },
   description: {

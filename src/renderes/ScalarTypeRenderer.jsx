@@ -37,6 +37,17 @@ export default class ScalarTypeRenderer extends BaseRenderer {
         return (
           <textarea type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} {...extraProps} defaultValue={defaultValue} />
         )
+      case 'select' :
+        const values = fieldOptions._enum || [];
+        return (
+          <select type="text"
+                  className="form-control"
+                  onChange={this._onChange}
+                  ref={(ref) => {this.input=ref}}
+                  defaultValue={defaultValue} {...extraProps}>
+            {values.map((value) => (<option value={value} key={value}>{value}</option>))}
+          </select>
+        )
       default:
         return (
           <input type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} {...extraProps} defaultValue={defaultValue} />
