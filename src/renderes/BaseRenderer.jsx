@@ -124,6 +124,7 @@ BaseRenderer.propTypes = {
   title: PropTypes.string,
   data: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.array,
     PropTypes.object,
     PropTypes.number
   ]),
