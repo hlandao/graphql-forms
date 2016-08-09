@@ -122,6 +122,10 @@ BaseRenderer.propTypes = {
   fieldsOptions: PropTypes.object.isRequired,
   path: PropTypes.string,
   title: PropTypes.string,
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+    PropTypes.number
+  ]),
   onChange: PropTypes.func
 }

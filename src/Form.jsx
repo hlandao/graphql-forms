@@ -12,6 +12,8 @@ class Form extends Component {
 
   render() {
     const {object, data, formOptions, fieldsOptions} = this.props
+
+    const submitTitle = formOptions.submitButton && formOptions.submitButton.title ? formOptions.submitButton.title : "Submit";
     return (
       <form className="gql-form" onSubmit={this.onSubmit}>
         <div className="panel panel-default">
@@ -24,7 +26,7 @@ class Form extends Component {
                                 fieldsOptions={fieldsOptions}
                                 onChange={this.onChange}
                                 ref={ref => this.objectRef = ref}/>
-            <button type="submit">Submit</button>
+            <button type="submit">{submitTitle}</button>
           </div>
         </div>
       </form>
@@ -60,7 +62,10 @@ Form.propTypes = {
 
 Form.defaultProps = {
   formOptions: {
-    nestedLevels: 3
+    nestedLevels: 3,
+    submitButton: {
+      title: "Submit"
+    }
   },
   fieldsOptions: {}
 }

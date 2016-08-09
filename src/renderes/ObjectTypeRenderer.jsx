@@ -54,10 +54,11 @@ export default class ObjectTypeRenderer extends BaseRenderer {
       const field = fields[key];
 
       const title = key;
-      const newPath = this.buildPath(path, key);
+      const childPath = this.buildPath(path, key);
       const onChange = this._onChange;
+      const childData = data ? data[key] : null;
 
-      return renderField.call(this, {title, object, data, formOptions, fieldsOptions, path: newPath, key, onChange}, field.type);
+      return renderField.call(this, {title, object, data: childData, formOptions, fieldsOptions, path: childPath, key, onChange}, field.type);
     })
   }
 

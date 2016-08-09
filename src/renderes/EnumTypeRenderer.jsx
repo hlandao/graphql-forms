@@ -28,12 +28,14 @@ export default class EnumTypeRenderer extends BaseRenderer {
 
   _renderInput() {
     let values = this.myType().getValues()
+    const defaultValue = this.props.data || null;
 
     return (
       <select type="text"
               className="form-control"
               onChange={this._onChange}
-              ref={(ref) => {this.input=ref}}>
+              ref={(ref) => {this.input=ref}}
+              defaultValue={defaultValue}>
         {values.map((value) => (<option value={value.value} key={value.name}>{value.name}</option>))}
       </select>
     )

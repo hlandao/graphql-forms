@@ -29,16 +29,17 @@ export default class ScalarTypeRenderer extends BaseRenderer {
   _renderInput() {
     let placeholder = this.getPlaceholder()
     let fieldOptions = this.myFieldOptions();
-    let textType = fieldOptions._textType || "";
-
+    const extraProps = fieldOptions._props;
+    const textType = fieldOptions._textType || "";
+    const defaultValue = this.props.data || "";
     switch (textType) {
       case 'textarea':
         return (
-          <textarea type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} />
+          <textarea type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} {...extraProps} defaultValue={defaultValue} />
         )
       default:
         return (
-          <input type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} />
+          <input type="text" className="form-control" placeholder={placeholder} onChange={this._onChange} ref={(ref) => {this.input=ref}} {...extraProps} defaultValue={defaultValue} />
         )
     }
   }

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {BlackBoxType} from './garphq-types'
+import {BlackBoxType} from './garphq-schema'
 import Form from '../src/Form.jsx'
 
 const FIELDS_OPTIONS = {
@@ -30,7 +29,25 @@ const FORM_OPTIONS = {
   nestedLevels: 10
 }
 
-class App extends Component {
+const DATA = {
+  name: "Prefilled name",
+  nestedExample: {
+    color: 1,
+    description: 'The green color is selected.'
+  },
+  listWithNestedObjectExample: [
+    {
+      color: 2,
+      description: 'The blue color is selected.'
+    },
+    {
+      color: 0,
+      description: 'The red color is selected.'
+    }
+  ]
+}
+
+export default class MyForm extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -43,7 +60,7 @@ class App extends Component {
       <div className="container">
         <div className="row">
           <div className="col-md-8">
-            <Form object={BlackBoxType} formOptions={FORM_OPTIONS} fieldsOptions={FIELDS_OPTIONS} onChange={(...args) => this.onChange(...args)} onSubmit={(...args) => this.onSubmit(...args)}/>
+            <Form object={BlackBoxType} formOptions={FORM_OPTIONS} fieldsOptions={FIELDS_OPTIONS} data={DATA} onChange={(...args) => this.onChange(...args)} onSubmit={(...args) => this.onSubmit(...args)}/>
           </div>
           <div className="col-md-4">
             <div className="panel panel-default">
@@ -76,4 +93,3 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));

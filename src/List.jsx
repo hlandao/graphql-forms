@@ -6,13 +6,12 @@ class List extends Component {
     super(props, context);
     this._renderRow = this._renderRow.bind(this);
     this._clickedDeleteRow = this._clickedDeleteRow.bind(this);
-    this._getAutoform = this._getAutoform.bind(this);
   }
   render() {
-    const {displayName, addItemFn, loading} = this.props;
+    const {title, addItemFn, loading} = this.props;
     return (
       <div className="container-fluid">
-        {displayName ? (<h2>{displayName}</h2>) : null }
+        {title ? (<h2>{title}</h2>) : null }
         {addItemFn ? (<a href="#" onClick={() => this._clickedAddItem()}>+ Add</a>) : null}
         {loading ? this._renderLoading() : this._renderTable()}
       </div>
@@ -24,16 +23,17 @@ class List extends Component {
     )
   }
   _renderTable() {
-    const {schema, data, addItemFn, deleteItemFn} = this.props;
-    const fields = schema.getFields();
+    const {object, data, deleteItemFn, fieldsOptions} = this.props;
+    const fields = object.getFields();
     return (
       <table className="table">
         <thead>
         <tr>
           {Object.keys(fields).map((key) => {
-            const autoform = this._getAutoform(key);
-            const label = autoform.label || capitalize(key);
-            return autoform.displayInList ? (<td key={key}>{label}</td>): null
+            const field = fields[key];
+            const fieldOptions = fieldsOptions[key] || {};
+            const label = fieldOptions._label || capitalize(field.name) || capitalize(key);
+            return !fieldOptions._hidden ? (<td key={key}>{label}</td>): null
           })}
           {deleteItemFn ? (<td> Remove </td>) : null }
         </tr>
@@ -45,15 +45,18 @@ class List extends Component {
     )
   }
   _renderRow(rowData) {
-    const {schema, deleteItemFn} = this.props;
-    const fields = schema.getFields();
+    const {object, deleteItemFn, fieldsOptions} = this.props;
+    const fields = object.getFields();
+    const idField = this._idField();
+    if(!rowData[idField]) return null;
+
     return (
-      <tr key={rowData._id}>
+      <tr key={rowData[idField]}>
         {Object.keys(fields).map((key) => {
-          const autoform = this._getAutoform(key);
-          return autoform.displayInList ? (<td key={key}> {autoform.renderAsLink ? (<a href="#" onClick={() => this._clickedItem(rowData, key)}>{rowData[key]}</a>) : rowData[key]} </td>) : null
+          const fieldOptions = fieldsOptions[key] || {};
+          return !fieldOptions._hidden ? (<td key={key}> {fieldOptions._renderAsLink ? (<a href="#" onClick={() => this._clickedItem(rowData, key)}>{rowData[key]}</a>) : rowData[key]} </td>) : null
         })}
-        {deleteItemFn ? (<td> <button className="btn btn-default" onClick={() => this._clickedDeleteRow(rowData._id)}>Remove</button> </td>) : null }
+        {deleteItemFn ? (<td> <button className="btn btn-default" onClick={() => this._clickedDeleteRow(rowData[idField])}>Remove</button> </td>) : null }
       </tr>
     )
   }
@@ -78,26 +81,29 @@ class List extends Component {
       alert("list: clickItemFn is not defined");
     }
   }
-  _getAutoform(key) {
-    const {schema, deleteItemFn} = this.props;
-    const fields = schema.getFields();
-    const definition = fields[key];
-    const originalAutoform = definition.autoform || {};
-    const propsAutoform = this.props.autoform ? this.props.autoform[key] || {} : {};
-    return Object.assign({}, originalAutoform, propsAutoform)
+  _idField() {
+    return this.props.listOptions.idField;
   }
 }
 
 List.propTypes = {
-  displayName: PropTypes.string.isRequired, /* (String) Display name for the header of the page */
-  schema: PropTypes.object.isRequired, /* (Object) The schema to be rendered */
+  title: PropTypes.string.isRequired, /* (String) Display name for the header of the page */
+  object: PropTypes.object.isRequired, /* (Object) The schema to be rendered */
   data: PropTypes.array.isRequired, /* (Array) array of the items to be displayed, must have same fields as the schema */
+  listOptions: PropTypes.object.isRequired,
+  fieldsOptions: PropTypes.object.isRequired,
   loading: PropTypes.bool, /* (Bool) whether data is being loaded at the moment */
   error: PropTypes.string, /* (String) a string to be displayed in case of an error */
-  deleteItemFn: PropTypes.func, /* (Func) a function(_id) to be invoked when user clicks remove. If no func is provided, remove button will not be rendered */
+  deleteItemFn: PropTypes.func, /* (Func) a function(id) to be invoked when user clicks remove. If no func is provided, remove button will not be rendered */
   addItemFn: PropTypes.func, /* (Func) a function() to be invoked when user clicks  the add button */
-  clickItemFn: PropTypes.func, /* (Func) a function(item, key) to be invoked when user clicks the item where key is the key that was clicked. */
-  autoform: PropTypes.object /* (Object) an object to override each fields "autoform" properties. {FIELD_NAME: {AUTOFORM_PROPERTIES}} */
+  clickItemFn: PropTypes.func /* (Func) a function(item, key) to be invoked when user clicks the item where key is the key that was clicked. */
 };
+
+List.defaultProps = {
+  listOptions: {
+    idField: 'id'
+  },
+  fieldsOptions: {}
+}
 
 export default List;

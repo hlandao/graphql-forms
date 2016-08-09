@@ -4,7 +4,9 @@ import {
   GraphQLObjectType,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLEnumType
+  GraphQLEnumType,
+  GraphQLSchema,
+  GraphQLID
 } from 'graphql'
 
 const ColorType = new GraphQLEnumType({
@@ -17,7 +19,7 @@ const ColorType = new GraphQLEnumType({
 });
 
 export const NestedType = new GraphQLObjectType({
-  name: 'BlackBoxes',
+  name: 'NestedBlackBoxes',
   description: '',
   fields: () => ({
     color: {
@@ -36,7 +38,7 @@ export const BlackBoxType = new GraphQLObjectType({
   description: '',
   fields: () => ({
     id: {
-      type: GraphQLInt,
+      type: GraphQLID,
       description: 'I\'m the id number of the black box.'
     },
     name: {
@@ -60,3 +62,19 @@ export const BlackBoxType = new GraphQLObjectType({
     }
   })
 });
+
+export const RootQuery = new GraphQLObjectType({
+  name: 'RootQuery',
+  description: '',
+  fields: () => ({
+    blackBoxes: {
+      type: new GraphQLList(BlackBoxType),
+      description: 'Get list of black boxes.'
+    }
+  })
+});
+
+
+export const Schema = new GraphQLSchema({
+  query: RootQuery
+})

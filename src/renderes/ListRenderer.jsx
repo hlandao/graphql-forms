@@ -17,7 +17,11 @@ export default class ListRenderer extends BaseRenderer {
   }
 
   componentDidMount() {
-    this._addNewItem();
+    if(this.props.data) {
+      this.props.data.forEach(() => this._addNewItem())
+    } else {
+      this._addNewItem();
+    }
   }
 
   render() {
@@ -78,13 +82,15 @@ export default class ListRenderer extends BaseRenderer {
     const {object, formOptions, fieldsOptions, path, data} = this.props;
     const onChange = this._onFieldChanged;
 
+    const childPath = this.buildPath(path, 'ofType');
+    const childData = this.props.data ? this.props.data[nestedObj.key] : null;
     const props = {
       object,
       formOptions,
       fieldsOptions,
-      path: this.buildPath(path, 'ofType'),
+      path: childPath,
       title: null,
-      data,
+      data: childData,
       key: nestedObj.key,
       onChange
     }
