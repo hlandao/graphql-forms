@@ -5,7 +5,8 @@ import {
   GraphQLEnumType,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
+  GraphQLUnionType
 } from 'graphql'
 import ScalarTypeRenderer from './ScalarTypeRenderer';
 import ListRenderer from './ListRenderer';
@@ -31,6 +32,11 @@ export function renderField(props, type) {
     case GraphQLNonNull:
       props.path = props.path + '.ofType';
       return renderField.call(this, props, type.ofType);
+      break;
+    case GraphQLUnionType:
+      const newType = type.getTypes()[0];
+      props.path += '.union0';
+      return renderField.call(this, props, newType);
       break;
   }
 

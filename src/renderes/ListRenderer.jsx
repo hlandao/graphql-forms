@@ -47,8 +47,10 @@ export default class ListRenderer extends BaseRenderer {
 
   _renderList() {
     const type = this.myType();
-    const ofType = type.ofType;
-
+    let ofType = type.ofType;
+    if(ofType.ofType) {
+      ofType = ofType.ofType;
+    }
     switch (ofType.constructor) {
       case GraphQLObjectType:
         return this._renderListOfObjectType()
@@ -66,14 +68,53 @@ export default class ListRenderer extends BaseRenderer {
   }
 
   _renderListOfObjectType() {
-    return this.state.nestedArr.map((nestedObj) => this._renderNestedField(nestedObj))
+    return this.state.nestedArr.map((nestedObj) => this._renderWrappedNestedField(nestedObj))
   }
 
   _renderListOfNonNullType() {
-    return this.state.nestedArr.map((nestedObj) => this._renderNestedField(nestedObj))
+    return this.state.nestedArr.map((nestedObj) => this._renderWrappedNestedField(nestedObj))
   }
 
   _renderNestedField(nestedObj) {
+    if(nestedObj.deleted) return null;
+
+    const type = this.myType();
+    const fieldType = type.ofType;
+
+    const {object, formOptions, fieldsOptions, path, data} = this.props;
+    const onChange = this._onFieldChanged;
+
+    const childPath = this.buildPath(path, 'ofType');
+    const childData = this.props.data ? this.props.data[nestedObj.key] : null;
+    const props = {
+      object,
+      formOptions,
+      fieldsOptions,
+      path: childPath,
+      title: null,
+      data: childData,
+      key: nestedObj.key,
+      onChange
+    }
+
+    return (
+    <fieldset className="form-horizontal" key={nestedObj.key}>
+      <div className="form-group">
+        <div className="col-sm-1">
+          <button className="btn btn-default btn-xs list-add-button" style={{float:"right"}} onClick={(e) => this._removeButtonClicked(e, nestedObj)}>
+            -
+          </button>
+        </div>
+        <label className="col-sm-2 control-label">{nestedObj.title}</label>
+        <div className="col-sm-9">
+          {renderField.call(this, props, fieldType)}
+        </div>
+      </div>
+    </fieldset>
+    )
+  }
+
+  _renderWrappedNestedField(nestedObj) {
     if(nestedObj.deleted) return null;
 
     const type = this.myType();

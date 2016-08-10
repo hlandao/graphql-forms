@@ -29,7 +29,7 @@ export default class ScalarTypeRenderer extends BaseRenderer {
   _renderInput() {
     let placeholder = this.getPlaceholder()
     let fieldOptions = this.myFieldOptions();
-    const extraProps = fieldOptions._props;
+    const extraProps = this.getExtraProps();
     const textType = fieldOptions._textType || "";
     const defaultValue = this.props.data || "";
     switch (textType) {
@@ -45,6 +45,7 @@ export default class ScalarTypeRenderer extends BaseRenderer {
                   onChange={this._onChange}
                   ref={(ref) => {this.input=ref}}
                   defaultValue={defaultValue} {...extraProps}>
+            <option></option>
             {values.map((value) => (<option value={value} key={value}>{value}</option>))}
           </select>
         )
@@ -64,5 +65,13 @@ export default class ScalarTypeRenderer extends BaseRenderer {
 
   getValue() {
     return this.input ? this.input.value : "";
+  }
+
+  getExtraProps() {
+    let formOptions = this.props.formOptions || {}
+    let formOptionsProps = formOptions._extraProps || {};
+    let fieldOptions = this.myFieldOptions();
+    let fieldOptionsProps = fieldOptions._props || {};
+    return Object.assign({},formOptionsProps, fieldOptionsProps)
   }
 }

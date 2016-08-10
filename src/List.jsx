@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from "react";
-import {capitalize} from 'lodash';
+import {capitalize, isArray} from 'lodash';
 
 class List extends Component {
   constructor(props, context) {
@@ -54,11 +54,19 @@ class List extends Component {
       <tr key={rowData[idField]}>
         {Object.keys(fields).map((key) => {
           const fieldOptions = fieldsOptions[key] || {};
-          return !fieldOptions._hidden ? (<td key={key}> {fieldOptions._renderAsLink ? (<a href="#" onClick={() => this._clickedItem(rowData, key)}>{rowData[key]}</a>) : rowData[key]} </td>) : null
+          const text = this._renderRowText(rowData[key]);
+          return !fieldOptions._hidden ? (<td key={key}> {fieldOptions._renderAsLink ? (<a href="#" onClick={() => this._clickedItem(rowData, key)}>{text}</a>) : text} </td>) : null
         })}
         {deleteItemFn ? (<td> <button className="btn btn-default" onClick={() => this._clickedDeleteRow(rowData[idField])}>Remove</button> </td>) : null }
       </tr>
     )
+  }
+  _renderRowText(val) {
+    if(isArray(val)) {
+      return val.join(', ');
+    } else {
+      return val;
+    }
   }
   _clickedAddItem() {
     if(this.props.addItemFn) {

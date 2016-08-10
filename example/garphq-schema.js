@@ -6,7 +6,8 @@ import {
   GraphQLNonNull,
   GraphQLEnumType,
   GraphQLSchema,
-  GraphQLID
+  GraphQLID,
+  GraphQLUnionType
 } from 'graphql'
 
 const ColorType = new GraphQLEnumType({
@@ -17,6 +18,41 @@ const ColorType = new GraphQLEnumType({
     BLUE: { value: 2 }
   }
 });
+
+export const DogType = new GraphQLObjectType({
+  name: 'DogType',
+  description: '',
+  fields: () => ({
+    dogName: {
+      type: GraphQLString,
+    }
+  })
+});
+
+export const CatType = new GraphQLObjectType({
+  name: 'CatType',
+  description: '',
+  fields: () => ({
+    catName: {
+      type: GraphQLString,
+    }
+  })
+});
+
+
+const PetType = new GraphQLUnionType({
+  name: 'Pet',
+  types: [ DogType, CatType ],
+  resolveType(value) {
+    if (value instanceof Dog) {
+      return DogType;
+    }
+    if (value instanceof Cat) {
+      return CatType;
+    }
+  }
+});
+
 
 export const NestedType = new GraphQLObjectType({
   name: 'NestedBlackBoxes',
@@ -59,6 +95,9 @@ export const BlackBoxType = new GraphQLObjectType({
     listWithNestedObjectExample: {
       type: new GraphQLList(NestedType),
       description: 'I\'m a list with nested object type'
+    },
+    pet: {
+      type: PetType
     }
   })
 });

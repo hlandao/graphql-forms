@@ -13,6 +13,7 @@ class Form extends Component {
   render() {
     const {object, data, formOptions, fieldsOptions} = this.props
 
+    const submitButtonHidden = formOptions.submitButton && formOptions.submitButton.hidden;
     const submitTitle = formOptions.submitButton && formOptions.submitButton.title ? formOptions.submitButton.title : "Submit";
     const title = formOptions.title || object.name;
     return (
@@ -27,7 +28,7 @@ class Form extends Component {
                                 fieldsOptions={fieldsOptions}
                                 onChange={this.onChange}
                                 ref={ref => this.objectRef = ref}/>
-            <button type="submit">{submitTitle}</button>
+            {submitButtonHidden ? null : <button type="submit">{submitTitle}</button>}
           </div>
         </div>
       </form>

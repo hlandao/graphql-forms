@@ -36,6 +36,7 @@ export default class EnumTypeRenderer extends BaseRenderer {
               onChange={this._onChange}
               ref={(ref) => {this.input=ref}}
               defaultValue={defaultValue}>
+        <option></option>
         {values.map((value) => (<option value={value.value} key={value.name}>{value.name}</option>))}
       </select>
     )

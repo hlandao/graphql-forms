@@ -2,7 +2,8 @@ import {
   GraphQLObjectType,
   GraphQLInputObjectType,
   GraphQLList,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLUnionType
 } from 'graphql'
 
 export function typeByPath(gqlType, path) {
@@ -28,13 +29,12 @@ export function typeByPath(gqlType, path) {
       case GraphQLInputObjectType:
       case GraphQLObjectType:
         return parentType.getFields()[keyName].type;
-        break;
       case GraphQLList:
         return parentType.ofType;
-        break;
       case GraphQLNonNull:
         return parentType.ofType;
-        break;
+      case GraphQLUnionType:
+        return parentType.getTypes()[0];
     }
   }, gqlType);
 }
@@ -71,6 +71,8 @@ export function fieldByPath(gqlType, path) {
       case GraphQLNonNull:
         return parentType.ofType;
         break;
+      case GraphQLUnionType:
+        return parentType.getTypes()[0];
     }
   }, gqlType);
 }
