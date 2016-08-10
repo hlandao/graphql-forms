@@ -64,7 +64,8 @@ export default class ListRenderer extends BaseRenderer {
   }
 
   _renderListOfScalarType() {
-    return this.state.nestedArr.map((nestedObj) => this._renderNestedField(nestedObj))
+    return this.state.nestedArr.map((nestedObj) => this._renderNestedTableField(nestedObj))
+
   }
 
   _renderListOfObjectType() {
@@ -75,7 +76,7 @@ export default class ListRenderer extends BaseRenderer {
     return this.state.nestedArr.map((nestedObj) => this._renderWrappedNestedField(nestedObj))
   }
 
-  _renderNestedField(nestedObj) {
+  _renderNestedTableField(nestedObj) {
     if(nestedObj.deleted) return null;
 
     const type = this.myType();
@@ -98,19 +99,12 @@ export default class ListRenderer extends BaseRenderer {
     }
 
     return (
-    <fieldset className="form-horizontal" key={nestedObj.key}>
-      <div className="form-group">
-        <div className="col-sm-1">
-          <button className="btn btn-default btn-xs list-add-button" style={{float:"right"}} onClick={(e) => this._removeButtonClicked(e, nestedObj)}>
-            -
-          </button>
-        </div>
-        <label className="col-sm-2 control-label">{nestedObj.title}</label>
-        <div className="col-sm-9">
-          {renderField.call(this, props, fieldType)}
-        </div>
-      </div>
-    </fieldset>
+      <fieldset className="form-inline" key={nestedObj.key} style={{paddingBottom: 10}}>
+        {renderField.call(this, props, fieldType)}
+        <button style={{marginLeft:10}} className="btn btn-default" onClick={(e) => this._removeButtonClicked(e, nestedObj)}>
+          -
+        </button>
+      </fieldset>
     )
   }
 
