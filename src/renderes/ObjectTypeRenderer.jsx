@@ -67,7 +67,7 @@ export default class ObjectTypeRenderer extends BaseRenderer {
     Object.keys(this.nested).map(key => {
       const ref = this.nested[key];
       const value = ref.getValue();
-      outputValue[key] = value;
+      outputValue[key] = value ? value : null;
     })
 
     return outputValue;

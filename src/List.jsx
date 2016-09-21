@@ -54,15 +54,17 @@ class List extends Component {
       <tr key={rowData[idField]}>
         {Object.keys(fields).map((key) => {
           const fieldOptions = fieldsOptions[key] || {};
-          const text = this._renderRowText(rowData[key]);
+          const text = this._renderRowText(rowData[key], fieldOptions);
           return !fieldOptions._hidden ? (<td key={key}> {fieldOptions._renderAsLink ? (<a href="#" onClick={() => this._clickedItem(rowData, key)}>{text}</a>) : text} </td>) : null
         })}
         {deleteItemFn ? (<td> <button className="btn btn-default" onClick={() => this._clickedDeleteRow(rowData[idField])}>Remove</button> </td>) : null }
       </tr>
     )
   }
-  _renderRowText(val) {
-    if(isArray(val)) {
+  _renderRowText(val, fieldOptions) {
+    if(fieldOptions.render) {
+      return fieldOptions.render(val);
+    } else if(isArray(val)) {
       return val.join(', ');
     } else {
       return val;

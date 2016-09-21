@@ -27361,7 +27361,7 @@
 	        description: 'I\'m a nested object type'
 	      },
 	      listExample: {
-	        type: new _graphql.GraphQLNonNull(new _graphql.GraphQLList(new _graphql.GraphQLNonNull(_graphql.GraphQLString))),
+	        type: new _graphql.GraphQLNonNull(new _graphql.GraphQLList(new _graphql.GraphQLNonNull(ColorType))),
 	        description: 'I\'m a list with string'
 	      },
 	      listWithNestedObjectExample: {
@@ -56342,7 +56342,7 @@
 	      Object.keys(this.nested).map(function (key) {
 	        var ref = _this3.nested[key];
 	        var value = ref.getValue();
-	        outputValue[key] = value;
+	        outputValue[key] = value ? value : null;
 	      });
 
 	      return outputValue;
@@ -57511,7 +57511,7 @@
 	        { key: rowData[idField] },
 	        Object.keys(fields).map(function (key) {
 	          var fieldOptions = fieldsOptions[key] || {};
-	          var text = _this3._renderRowText(rowData[key]);
+	          var text = _this3._renderRowText(rowData[key], fieldOptions);
 	          return !fieldOptions._hidden ? _react2.default.createElement(
 	            "td",
 	            { key: key },
@@ -57543,8 +57543,10 @@
 	    }
 	  }, {
 	    key: "_renderRowText",
-	    value: function _renderRowText(val) {
-	      if ((0, _lodash.isArray)(val)) {
+	    value: function _renderRowText(val, fieldOptions) {
+	      if (fieldOptions.render) {
+	        return fieldOptions.render(val);
+	      } else if ((0, _lodash.isArray)(val)) {
 	        return val.join(', ');
 	      } else {
 	        return val;

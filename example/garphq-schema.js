@@ -89,7 +89,7 @@ export const BlackBoxType = new GraphQLObjectType({
       description: 'I\'m a nested object type'
     },
     listExample: {
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString))),
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ColorType))),
       description: 'I\'m a list with string'
     },
     listWithNestedObjectExample: {

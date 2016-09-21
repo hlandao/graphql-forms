@@ -65,7 +65,6 @@ export default class ListRenderer extends BaseRenderer {
 
   _renderListOfScalarType() {
     return this.state.nestedArr.map((nestedObj) => this._renderNestedTableField(nestedObj))
-
   }
 
   _renderListOfObjectType() {
